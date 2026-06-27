@@ -37,8 +37,19 @@ export default async function Home() {
                 </Link>
               </div>
             </div>
-            <div className="hero-image-container" style={{ background: "transparent", border: "none", boxShadow: "none", display: "flex", justifyContent: "center" }}>
-              <img src="/james-robot.png" alt="James - Asistente de IA de iCenit" className="hero-image" style={{ maxHeight: "380px", width: "auto" }} />
+            <div className="hero-image-container" style={{ background: "transparent", border: "none", boxShadow: "none", display: "flex", justifyContent: "center", alignSelf: "end" }}>
+              <img 
+                src="/james-robot.png" 
+                alt="James - Asistente de IA de iCenit" 
+                className="hero-image" 
+                style={{ 
+                  maxHeight: "360px", 
+                  width: "auto", 
+                  display: "block",
+                  maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%)",
+                  WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%)"
+                }} 
+              />
             </div>
           </div>
         </section>

@@ -107,14 +107,14 @@ export default function WaveBackground() {
     <canvas
       ref={canvasRef}
       style={{
-        position: "absolute",
+        position: "fixed",
         top: 0,
         left: 0,
-        width: "100%",
-        height: "100%",
-        zIndex: 0,
+        width: "100vw",
+        height: "100vh",
+        zIndex: -1,
         pointerEvents: "none",
-        opacity: 0.65,
+        opacity: 0.55,
       }}
     />
   );
