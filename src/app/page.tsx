@@ -162,7 +162,7 @@ export default async function Home() {
               <div>
                 <div style={{ position: "relative", width: "100%", height: "210px", overflow: "hidden" }}>
                   <img 
-                    src="/grupo-analitica-avanzada.jpg" 
+                    src="/grupo-analitica-avanzada-v3.png" 
                     alt="Analítica Avanzada" 
                     className="category-card-img"
                   />
@@ -178,7 +178,7 @@ export default async function Home() {
               <div>
                 <div style={{ position: "relative", width: "100%", height: "210px", overflow: "hidden" }}>
                   <img 
-                    src="/grupo-aplicaciones-v2.png" 
+                    src="/grupo-aplicaciones-v3.png" 
                     alt="Aplicaciones" 
                     className="category-card-img"
                   />
@@ -194,7 +194,7 @@ export default async function Home() {
               <div>
                 <div style={{ position: "relative", width: "100%", height: "210px", overflow: "hidden" }}>
                   <img 
-                    src="/grupo-apoyo-a-la-gestion-v2.png" 
+                    src="/grupo-apoyo-a-la-gestion-v3.png" 
                     alt="Apoyo a la Gestión" 
                     className="category-card-img"
                   />
