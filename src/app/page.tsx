@@ -271,7 +271,7 @@ export default async function Home() {
               </p>
               <div>
                 <Link href="/empresa/contacto" className="btn-primary" style={{ 
-                  background: "var(--accent-orange)", 
+                  background: "#FF4100", 
                   color: "#ffffff", 
                   padding: "1rem 2rem", 
                   borderRadius: "8px", 
