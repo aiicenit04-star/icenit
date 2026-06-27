@@ -123,7 +123,7 @@ export default async function Home() {
           <div className="section-header" style={{ marginBottom: "2.5rem" }}>
             <h2 className="section-title" style={{ fontSize: "2.1rem", fontWeight: 800, letterSpacing: "-0.5px", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem", flexWrap: "wrap" }}>
               Más de 40 empresas ya lideran con
-              <img src="/james-dots.png" alt="James Logo" style={{ height: "1.75rem", width: "auto", display: "inline-block", verticalAlign: "middle" }} />
+              <img src="/james-dots.png" alt="James Logo" style={{ height: "2.8rem", width: "auto", display: "inline-block", verticalAlign: "middle" }} />
             </h2>
             <p className="section-desc" style={{ maxWidth: "700px", margin: "0.75rem auto 0", fontSize: "1.0rem", color: "var(--text-secondary)", lineHeight: "1.5" }}>
               Desde minería hasta energía y transporte, ICENIT impulsa decisiones seguras en los sectores más exigentes.
