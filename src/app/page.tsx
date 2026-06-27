@@ -152,27 +152,61 @@ export default async function Home() {
 
         {/* Modules Section */}
         <section className="page-section">
-          <div className="section-header">
-            <span className="section-subtitle">Módulos</span>
-            <h2 className="section-title">James Cloud Platform</h2>
+          <div className="section-header" style={{ textAlign: "left", marginBottom: "2.5rem" }}>
+            <h2 className="section-title" style={{ textAlign: "left", fontSize: "2.2rem", fontWeight: 800 }}>Módulos</h2>
           </div>
-          <div className="modules-grid">
-            {allModules.slice(0, 6).map((m) => (
-              <div key={m.id} className="module-card">
-                <div>
-                  <span className="module-meta">
-                    {m.category.replace("-", " ")}
-                  </span>
-                  <h3 className="module-title">{m.title}</h3>
-                  <p className="module-desc">{m.metaDescription}</p>
+          <div className="modules-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.75rem" }}>
+            
+            {/* Card 1: Analítica Avanzada */}
+            <Link href="/categoria/analitica-avanzada" className="category-card">
+              <div>
+                <div style={{ position: "relative", width: "100%", height: "210px", overflow: "hidden" }}>
+                  <img 
+                    src="/grupo-analitica-avanzada.jpg" 
+                    alt="Analítica Avanzada" 
+                    className="category-card-img"
+                  />
                 </div>
-                <Link href={`/modulos/${m.id}`} className="module-link">
-                  Saber más &rarr;
-                </Link>
+                <div className="category-card-title-container">
+                  <h3 className="category-card-title">Analítica Avanzada</h3>
+                </div>
               </div>
-            ))}
+            </Link>
+
+            {/* Card 2: Aplicaciones */}
+            <Link href="/categoria/aplicaciones" className="category-card">
+              <div>
+                <div style={{ position: "relative", width: "100%", height: "210px", overflow: "hidden" }}>
+                  <img 
+                    src="/grupo-aplicaciones.jpg" 
+                    alt="Aplicaciones" 
+                    className="category-card-img"
+                  />
+                </div>
+                <div className="category-card-title-container">
+                  <h3 className="category-card-title">Aplicaciones</h3>
+                </div>
+              </div>
+            </Link>
+
+            {/* Card 3: Apoyo a la Gestión */}
+            <Link href="/categoria/apoyo-a-la-gestion" className="category-card">
+              <div>
+                <div style={{ position: "relative", width: "100%", height: "210px", overflow: "hidden" }}>
+                  <img 
+                    src="/grupo-apoyo-a-la-gestion.jpg" 
+                    alt="Apoyo a la Gestión" 
+                    className="category-card-img"
+                  />
+                </div>
+                <div className="category-card-title-container">
+                  <h3 className="category-card-title">Apoyo a la Gestión</h3>
+                </div>
+              </div>
+            </Link>
+
           </div>
-          <div style={{ textAlign: "center", marginTop: "3rem" }}>
+          <div style={{ textAlign: "center", marginTop: "3.5rem" }}>
             <Link href="/modulos" className="btn-secondary">
               Ver Todos los Módulos
             </Link>
