@@ -178,7 +178,7 @@ export default async function Home() {
               <div>
                 <div style={{ position: "relative", width: "100%", height: "210px", overflow: "hidden" }}>
                   <img 
-                    src="/grupo-aplicaciones.png" 
+                    src="/grupo-aplicaciones-v2.png" 
                     alt="Aplicaciones" 
                     className="category-card-img"
                   />
@@ -194,7 +194,7 @@ export default async function Home() {
               <div>
                 <div style={{ position: "relative", width: "100%", height: "210px", overflow: "hidden" }}>
                   <img 
-                    src="/grupo-apoyo-a-la-gestion.png" 
+                    src="/grupo-apoyo-a-la-gestion-v2.png" 
                     alt="Apoyo a la Gestión" 
                     className="category-card-img"
                   />
