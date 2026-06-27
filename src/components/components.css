@@ -102,12 +102,14 @@
 }
 
 .dropdown-section-title {
-  font-size: 0.75rem;
+  font-family: var(--font-title);
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--accent-blue-light);
+  letter-spacing: 1.8px;
+  color: #FF4100;
   font-weight: 700;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.35rem;
+  opacity: 0.9;
 }
 
 .dropdown-item {
