@@ -219,21 +219,17 @@ export default async function Home() {
             
             {/* Left: Mascot Image */}
             <div style={{ display: "flex", justifyContent: "center", position: "relative" }}>
-              <div className="glass-panel" style={{ 
-                padding: "1.5rem", 
-                borderRadius: "24px", 
-                background: "rgba(10, 15, 26, 0.6)",
-                border: "1px solid rgba(255, 65, 0, 0.15)",
-                boxShadow: "0 20px 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(255, 65, 0, 0.05)",
-                maxWidth: "340px",
-                width: "100%"
-              }}>
-                <img 
-                  src="/james-robot.png" 
-                  alt="James AI Assistant" 
-                  style={{ width: "100%", height: "auto", borderRadius: "16px", display: "block" }}
-                />
-              </div>
+              <img 
+                src="/james-robot.png" 
+                alt="James AI Assistant" 
+                style={{ 
+                  width: "100%", 
+                  maxWidth: "320px", 
+                  height: "auto", 
+                  display: "block",
+                  mixBlendMode: "screen"
+                }}
+              />
               <div style={{
                 position: "absolute",
                 top: "50%",
