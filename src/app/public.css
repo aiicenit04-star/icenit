@@ -160,15 +160,6 @@
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(5, 7, 12, 0.6) 100%);
 }
 
-.problem-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(to right, transparent, var(--accent-blue-light), transparent);
-}
 
 .problem-text {
   font-size: 1.15rem;
