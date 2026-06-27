@@ -61,6 +61,7 @@ export default async function Home() {
               <span className="problem-highlight">
                 Los incidentes no avisan. La falta de visibilidad puede costar millones — o vidas.
               </span>
+              <br />
               <span style={{ color: "var(--accent-blue)" }}>James cambia eso.</span> Con inteligencia predictiva y validación experta, convierte señales dispersas en decisiones que previenen el próximo accidente.
             </p>
           </div>
