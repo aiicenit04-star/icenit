@@ -37,8 +37,8 @@ export default async function Home() {
                 </Link>
               </div>
             </div>
-            <div className="hero-image-container">
-              <img src="/cube-hero.jpg" alt="James Data Cube - Data saves lives" className="hero-image" />
+            <div className="hero-image-container" style={{ background: "transparent", border: "none", boxShadow: "none", display: "flex", justifyContent: "center" }}>
+              <img src="/james-robot.png" alt="James - Asistente de IA de iCenit" className="hero-image" style={{ maxHeight: "380px", width: "auto" }} />
             </div>
           </div>
         </section>
