@@ -17,27 +17,29 @@ export default async function Home() {
       
       <main style={{ flexGrow: 1 }}>
         {/* Hero Section */}
-        <section className="hero-section" style={{ position: "relative", overflow: "hidden" }}>
+        <section className="hero-section">
           <WaveBackground />
-          <div style={{ position: "relative", zIndex: 1 }}>
-            <div className="hero-tag">James AI Assistant®</div>
-            <h1 className="hero-h1 text-gradient">
-              Transformamos datos en decisiones que anticipan riesgos en seguridad y medio ambiente
-            </h1>
-            <p className="hero-sub">
-              Inteligencia validada por expertos para proteger vidas y operaciones.
-            </p>
-            <div className="hero-ctas">
-              <Link href="/empresa/contacto" className="btn-primary">
-                Habla con un experto icenit
-              </Link>
-              <Link href="/solicita-una-demo" className="btn-secondary">
-                Solicita una Demo
-              </Link>
+          <div className="hero-content-wrapper">
+            <div>
+              <div className="hero-tag">James AI Assistant®</div>
+              <h1 className="hero-h1 text-gradient">
+                Transformamos datos en decisiones que anticipan riesgos en seguridad y medio ambiente
+              </h1>
+              <p className="hero-sub">
+                Inteligencia validada por expertos para proteger vidas y operaciones.
+              </p>
+              <div className="hero-ctas">
+                <Link href="/empresa/contacto" className="btn-primary">
+                  Habla con un experto icenit
+                </Link>
+                <Link href="/solicita-una-demo" className="btn-secondary">
+                  Solicita una Demo
+                </Link>
+              </div>
             </div>
-          </div>
-          <div className="hero-image-container">
-            <img src="/cube-hero.jpg" alt="James Data Cube - Data saves lives" className="hero-image" />
+            <div className="hero-image-container">
+              <img src="/cube-hero.jpg" alt="James Data Cube - Data saves lives" className="hero-image" />
+            </div>
           </div>
         </section>
 
