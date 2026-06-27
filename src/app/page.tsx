@@ -213,6 +213,87 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* Mascot Call to Action Section */}
+        <section className="page-section" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,65,0,0.02) 100%)", borderTop: "1px solid var(--border-color)", borderBottom: "1px solid var(--border-color)", padding: "5rem 2rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "4rem", alignItems: "center", maxWidth: "1000px", margin: "0 auto" }}>
+            
+            {/* Left: Mascot Image */}
+            <div style={{ display: "flex", justifyContent: "center", position: "relative" }}>
+              <div className="glass-panel" style={{ 
+                padding: "1.5rem", 
+                borderRadius: "24px", 
+                background: "rgba(10, 15, 26, 0.6)",
+                border: "1px solid rgba(255, 65, 0, 0.15)",
+                boxShadow: "0 20px 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(255, 65, 0, 0.05)",
+                maxWidth: "340px",
+                width: "100%"
+              }}>
+                <img 
+                  src="/james-robot.png" 
+                  alt="James AI Assistant" 
+                  style={{ width: "100%", height: "auto", borderRadius: "16px", display: "block" }}
+                />
+              </div>
+              <div style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "280px",
+                height: "280px",
+                background: "radial-gradient(circle, rgba(255,65,0,0.12) 0%, rgba(255,65,0,0) 70%)",
+                zIndex: -1,
+                filter: "blur(20px)"
+              }} />
+            </div>
+
+            {/* Right: Text Content */}
+            <div style={{ textAlign: "left" }}>
+              <h2 className="section-title" style={{ 
+                textAlign: "left", 
+                fontSize: "2.3rem", 
+                lineHeight: "1.25", 
+                fontWeight: 800,
+                marginBottom: "1.5rem",
+                fontFamily: "var(--font-title)",
+                letterSpacing: "-0.5px"
+              }}>
+                ¿Cuántos incidentes podrías evitar si tuvieras la información antes de que ocurrieran?
+              </h2>
+              <p style={{ 
+                fontSize: "1.15rem", 
+                color: "var(--text-secondary)", 
+                marginBottom: "2.5rem", 
+                display: "flex", 
+                alignItems: "center", 
+                gap: "0.4rem",
+                flexWrap: "wrap"
+              }}>
+                Descúbrelo con 
+                <img src="/james-logo.png" alt="James" style={{ height: "1.4rem", width: "auto", display: "inline-block", verticalAlign: "middle" }} />
+              </p>
+              <div>
+                <Link href="/empresa/contacto" className="btn-primary" style={{ 
+                  background: "var(--accent-orange)", 
+                  color: "#ffffff", 
+                  padding: "1rem 2rem", 
+                  borderRadius: "8px", 
+                  fontWeight: 700, 
+                  fontSize: "0.95rem",
+                  letterSpacing: "0.5px",
+                  textDecoration: "none",
+                  display: "inline-block",
+                  boxShadow: "0 4px 15px rgba(255,65,0,0.3)",
+                  transition: "all 0.3s"
+                }}>
+                  HABLA CON UN EXPERTO ICENIT
+                </Link>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
         {/* Data Driven Section */}
         <section className="page-section" style={{ background: "rgba(255,255,255,0.01)" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "4rem", alignItems: "center" }}>
