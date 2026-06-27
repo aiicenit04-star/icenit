@@ -119,8 +119,20 @@ export default async function Home() {
         </section>
 
         {/* Stats / Social Proof */}
-        <section className="stats-section">
-          <div className="stats-grid">
+        <section className="page-section" style={{ background: "rgba(255,255,255,0.01)", borderTop: "1px solid var(--border-color)", borderBottom: "1px solid var(--border-color)" }}>
+          <div className="section-header" style={{ marginBottom: "2.5rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.75rem" }}>
+              <img src="/james-dots.png" alt="James Dots" style={{ height: "14px", width: "auto", mixBlendMode: "screen" }} />
+              <span className="section-subtitle" style={{ marginBottom: 0, paddingLeft: 0 }}>
+                Más de 40 empresas ya lideran con James
+              </span>
+            </div>
+            <h2 className="section-title" style={{ maxWidth: "850px", margin: "0 auto", fontSize: "1.75rem", lineHeight: "1.4" }}>
+              Desde minería hasta energía y transporte, ICENIT impulsa decisiones seguras en los sectores más exigentes.
+            </h2>
+          </div>
+
+          <div className="stats-grid" style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
             <div className="stat-item">
               <span className="stat-number">+40</span>
               <span className="stat-label">Empresas</span>
@@ -132,11 +144,6 @@ export default async function Home() {
             <div className="stat-item">
               <span className="stat-number">13</span>
               <span className="stat-label">Sectores</span>
-            </div>
-            <div className="stat-item" style={{ justifyContent: "center" }}>
-              <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: "1.4" }}>
-                Minería, energía, transporte,<br />entre otros.
-              </p>
             </div>
           </div>
         </section>
