@@ -206,13 +206,28 @@
 
 .step-number {
   font-family: var(--font-title);
-  font-size: 2.25rem;
-  font-weight: 900;
-  color: rgba(255, 65, 0, 0.1);
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: #ffffff;
   position: absolute;
-  top: 1.25rem;
+  top: 1.5rem;
   right: 1.5rem;
   line-height: 1;
+  opacity: 0.8;
+}
+
+.step-icon-wrapper {
+  color: #FF4100;
+  margin-bottom: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-icon-wrapper svg {
+  width: 32px;
+  height: 32px;
+  stroke-width: 1.0;
 }
 
 .step-title {
