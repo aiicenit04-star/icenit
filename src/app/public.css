@@ -148,6 +148,14 @@
   font-weight: 700;
 }
 
+.section-desc {
+  max-width: 600px;
+  margin: 0.75rem auto 0;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
 /* Problem Section */
 .problem-card {
   max-width: 960px;

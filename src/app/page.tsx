@@ -70,8 +70,11 @@ export default async function Home() {
         {/* How It Works (01 / 03 / 10) */}
         <section className="page-section" style={{ background: "rgba(255,255,255,0.01)" }}>
           <div className="section-header">
-            <span className="section-subtitle">Cómo Funciona</span>
+            <span className="section-subtitle">Cómo lo hace James</span>
             <h2 className="section-title">De los datos al control total, en solo minutos</h2>
+            <p className="section-desc">
+              James transforma tu información en alertas, explicaciones y acciones validadas por expertos.
+            </p>
           </div>
           <div className="how-it-works-grid">
             <div className="step-card">
