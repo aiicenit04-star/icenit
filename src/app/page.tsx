@@ -58,8 +58,8 @@ export default async function Home() {
         <section className="page-section" style={{ paddingTop: 0 }}>
           <div className="problem-card">
             <p className="problem-text">
-              Los incidentes no avisan. La falta de visibilidad puede costar millones — o vidas.
-              James cambia eso. Con inteligencia predictiva y validación experta, convierte señales
+              Los incidentes no avisan. La falta de visibilidad puede costar millones — o vidas.{" "}
+              <span style={{ color: "var(--accent-blue)" }}>James cambia eso.</span> Con inteligencia predictiva y validación experta, convierte señales
               dispersas en decisiones que previenen el próximo accidente.
             </p>
           </div>

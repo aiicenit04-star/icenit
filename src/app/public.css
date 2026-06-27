@@ -162,10 +162,10 @@
 
 
 .problem-text {
-  font-size: 1.15rem;
-  line-height: 1.65;
+  font-size: 1.35rem;
+  line-height: 1.7;
   color: var(--text-primary);
-  font-weight: 450;
+  font-weight: 600;
 }
 
 /* How It Works (01 / 03 / 10) */
