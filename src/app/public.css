@@ -206,14 +206,14 @@
 
 .step-number {
   font-family: var(--font-title);
-  font-size: 1.6rem;
-  font-weight: 300;
+  font-size: 2.25rem;
+  font-weight: 900;
   color: #ffffff;
   position: absolute;
-  top: 1.5rem;
+  top: 1.25rem;
   right: 1.5rem;
   line-height: 1;
-  opacity: 0.8;
+  opacity: 0.95;
 }
 
 .step-icon-wrapper {
