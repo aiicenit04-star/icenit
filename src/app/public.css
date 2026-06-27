@@ -4,15 +4,25 @@
 .hero-section {
   position: relative;
   padding: 8rem 1.5rem 6rem;
-  background: radial-gradient(circle at 50% -20%, rgba(37, 99, 235, 0.15) 0%, transparent 60%);
-  display: flex;
-  flex-direction: column;
+  background: radial-gradient(circle at 50% -20%, rgba(255, 65, 0, 0.12) 0%, transparent 60%);
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
   align-items: center;
-  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .hero-section {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding-top: 6rem;
+  }
 }
 
 .hero-tag {
-  background: rgba(37, 99, 235, 0.1);
+  background: rgba(255, 65, 0, 0.08);
   color: var(--accent-blue-light);
   padding: 0.5rem 1rem;
   border-radius: 9999px;
@@ -20,26 +30,45 @@
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  border: 1px solid rgba(37, 99, 235, 0.2);
+  border: 1px solid rgba(255, 65, 0, 0.18);
   margin-bottom: 2rem;
+  display: inline-block;
+}
+
+.hero-image-container {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(255, 65, 0, 0.15), 0 0 10px rgba(0, 216, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.5s ease;
+}
+
+.hero-image-container:hover {
+  box-shadow: 0 0 60px rgba(255, 65, 0, 0.25), 0 0 20px rgba(0, 216, 255, 0.15);
+  transform: scale(1.015);
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .hero-h1 {
   font-family: var(--font-title);
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: 900;
-  line-height: 1.1;
+  line-height: 1.15;
   letter-spacing: -1px;
   margin-bottom: 1.5rem;
-  max-width: 900px;
 }
 
 .hero-sub {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: var(--text-secondary);
-  max-width: 650px;
   line-height: 1.6;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
 
 .hero-ctas {

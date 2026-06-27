@@ -6,8 +6,8 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="footer-container">
         <div className="footer-brand">
-          <Link href="/" className="logo-link">
-            iCenit
+          <Link href="/" className="logo-link" style={{ display: "flex", alignItems: "center" }}>
+            <img src="/logo.svg" alt="iCenit Logo" width="138" height="53" style={{ display: "block" }} />
           </Link>
           <p className="footer-slogan">
             Inteligencia aplicada al riesgo.<br />

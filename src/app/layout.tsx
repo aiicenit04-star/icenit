@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: "iCenit.ai — JAMES AI ASSISTANT®",
   description: "Transformamos datos en decisiones que anticipan riesgos en seguridad y medio ambiente. Inteligencia validada por expertos para proteger vidas y operaciones.",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon-icenit.png",
   },
 };
 

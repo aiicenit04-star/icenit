@@ -5,9 +5,8 @@ export default function Header() {
   return (
     <header className="site-header">
       <div className="header-container">
-        <Link href="/" className="logo-link">
-          iCenit
-          <span className="logo-sub">JAMES AI ASSISTANT</span>
+        <Link href="/" className="logo-link" style={{ display: "flex", alignItems: "center" }}>
+          <img src="/logo.svg" alt="iCenit Logo" width="138" height="53" style={{ display: "block" }} />
         </Link>
 
         <nav>

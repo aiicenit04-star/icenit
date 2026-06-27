@@ -6,19 +6,19 @@
 }
 
 :root {
-  --bg-dark: #090e1a;
-  --bg-dark-rgb: 9, 14, 26;
-  --bg-card: rgba(17, 24, 39, 0.7);
-  --bg-card-hover: rgba(31, 41, 55, 0.8);
+  --bg-dark: #05070c;
+  --bg-dark-rgb: 5, 7, 12;
+  --bg-card: rgba(15, 23, 42, 0.7);
+  --bg-card-hover: rgba(30, 41, 59, 0.85);
   
   --text-primary: #f3f4f6;
   --text-secondary: #9ca3af;
   --text-muted: #6b7280;
   
-  --accent-blue: #2563eb;
-  --accent-blue-light: #3b82f6;
-  --accent-blue-rgb: 37, 99, 235;
-  --accent-cyan: #06b6d4;
+  --accent-blue: #FF4100;
+  --accent-blue-light: #FF875E;
+  --accent-blue-rgb: 255, 65, 0;
+  --accent-cyan: #FF7A00;
   --accent-green: #10b981;
   
   --border-color: rgba(255, 255, 255, 0.08);
@@ -100,7 +100,7 @@ button {
 }
 
 .text-gradient-blue {
-  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #ff875e 0%, #ff4100 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
