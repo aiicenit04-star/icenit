@@ -220,14 +220,15 @@ export default async function Home() {
             {/* Left: Mascot Image */}
             <div style={{ display: "flex", justifyContent: "center", position: "relative" }}>
               <img 
-                src="/james-robot.png" 
+                src="/james-robot-v3.png" 
                 alt="James AI Assistant" 
                 style={{ 
                   width: "100%", 
                   maxWidth: "320px", 
                   height: "auto", 
                   display: "block",
-                  mixBlendMode: "screen"
+                  maskImage: "linear-gradient(to bottom, black 70%, transparent 96%)",
+                  WebkitMaskImage: "linear-gradient(to bottom, black 70%, transparent 96%)"
                 }}
               />
               <div style={{
