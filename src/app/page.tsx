@@ -120,16 +120,14 @@ export default async function Home() {
 
         {/* Stats / Social Proof */}
         <section className="page-section" style={{ background: "rgba(255,255,255,0.01)", borderTop: "1px solid var(--border-color)", borderBottom: "1px solid var(--border-color)" }}>
-          <div className="section-header" style={{ marginBottom: "2.5rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.75rem" }}>
-              <img src="/james-dots.png" alt="James Dots" style={{ height: "14px", width: "auto", mixBlendMode: "screen" }} />
-              <span className="section-subtitle" style={{ marginBottom: 0, paddingLeft: 0 }}>
-                Más de 40 empresas ya lideran con James
-              </span>
-            </div>
-            <h2 className="section-title" style={{ maxWidth: "850px", margin: "0 auto", fontSize: "1.75rem", lineHeight: "1.4" }}>
-              Desde minería hasta energía y transporte, ICENIT impulsa decisiones seguras en los sectores más exigentes.
+          <div className="section-header" style={{ marginBottom: "2.5rem" }}>
+            <h2 className="section-title" style={{ fontSize: "2.0rem", fontWeight: 800, textTransform: "uppercase", letterSpacing: "-0.5px", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+              Más de 40 empresas ya lideran con
+              <img src="/james-dots.png" alt="James Dots" style={{ height: "1.2rem", width: "auto", mixBlendMode: "screen", display: "inline-block" }} />
             </h2>
+            <p className="section-desc" style={{ maxWidth: "700px", margin: "0.75rem auto 0", fontSize: "1.0rem", color: "var(--text-secondary)", lineHeight: "1.5" }}>
+              Desde minería hasta energía y transporte, ICENIT impulsa decisiones seguras en los sectores más exigentes.
+            </p>
           </div>
 
           <div className="stats-grid" style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
