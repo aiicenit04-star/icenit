@@ -113,23 +113,29 @@
 .dropdown-item {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  padding: 0.5rem;
-  border-radius: 6px;
+  gap: 0.1rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
 }
 
 .dropdown-item:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 65, 0, 0.04);
+}
+
+.dropdown-item:hover .dropdown-item-title {
+  color: #FF4100;
 }
 
 .dropdown-item-title {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-primary);
+  transition: color 0.2s ease;
 }
 
 .dropdown-item-desc {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
 }
 
