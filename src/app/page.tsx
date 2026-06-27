@@ -123,7 +123,7 @@ export default async function Home() {
           <div className="section-header" style={{ marginBottom: "2.5rem" }}>
             <h2 className="section-title" style={{ fontSize: "2.1rem", fontWeight: 800, letterSpacing: "-0.5px", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem", flexWrap: "wrap" }}>
               Más de 40 empresas ya lideran con
-              <img src="/james-dots.png" alt="James Logo" style={{ height: "2.8rem", width: "auto", display: "inline-block", verticalAlign: "middle" }} />
+              <img src="/logo.svg" alt="James Logo" style={{ height: "2.5rem", width: "auto", display: "inline-block", verticalAlign: "middle", marginTop: "-0.15rem" }} />
             </h2>
             <p className="section-desc" style={{ maxWidth: "700px", margin: "0.75rem auto 0", fontSize: "1.0rem", color: "var(--text-secondary)", lineHeight: "1.5" }}>
               Desde minería hasta energía y transporte, ICENIT impulsa decisiones seguras en los sectores más exigentes.
@@ -143,6 +143,10 @@ export default async function Home() {
               <span className="stat-number">13</span>
               <span className="stat-label">Sectores</span>
             </div>
+          </div>
+
+          <div className="client-logos-container" style={{ display: "flex", justifyContent: "center", marginTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.04)", paddingTop: "2rem" }}>
+            <img src="/client-logos.png" alt="Logos de empresas líderes" style={{ maxWidth: "850px", width: "100%", height: "auto", opacity: 0.8, mixBlendMode: "lighten" }} />
           </div>
         </section>
 
