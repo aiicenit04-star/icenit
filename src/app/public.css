@@ -69,15 +69,15 @@
 
 .hero-h1 {
   font-family: var(--font-title);
-  font-size: 2.6rem;
+  font-size: clamp(1.8rem, 4vw, 2.75rem);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
   letter-spacing: -0.5px;
   margin-bottom: 1.25rem;
 }
 
 .hero-sub {
-  font-size: 1.05rem;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 2rem;
@@ -85,7 +85,20 @@
 
 .hero-ctas {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
+}
+
+.hero-image {
+  width: auto;
+  max-height: 450px;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .hero-image {
+    max-height: 320px;
+  }
 }
 
 .btn-primary {
@@ -124,12 +137,12 @@
 .page-section {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 4.5rem 1.5rem;
+  padding: clamp(2.5rem, 5vw, 4.5rem) 1.5rem;
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
 }
 
 .section-subtitle {
@@ -144,15 +157,16 @@
 
 .section-title {
   font-family: var(--font-title);
-  font-size: 2.1rem;
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .section-desc {
   max-width: 600px;
   margin: 0.75rem auto 0;
   color: var(--text-secondary);
-  font-size: 1.05rem;
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
   line-height: 1.5;
 }
 
@@ -184,14 +198,14 @@
 /* How It Works (01 / 03 / 10) */
 .how-it-works-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: clamp(1rem, 2.5vw, 1.5rem);
   margin-top: 2rem;
 }
 
 .step-card {
   position: relative;
-  padding: 2rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
   background: rgba(15, 23, 42, 0.3);
   border: 1px solid var(--border-color);
   border-radius: 12px;
@@ -246,8 +260,8 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(165px, 100%), 1fr));
+  gap: clamp(1rem, 2.5vw, 1.5rem);
   max-width: 1100px;
   margin: 0 auto;
   padding: 2.5rem 1.5rem;
@@ -262,7 +276,7 @@
 
 .stat-number {
   font-family: var(--font-title);
-  font-size: 2.75rem;
+  font-size: clamp(2.2rem, 5vw, 2.75rem);
   font-weight: 800;
   color: #fff;
   line-height: 1;
@@ -279,8 +293,8 @@
 /* Modules Section */
 .modules-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
+  gap: clamp(1rem, 2.5vw, 1.5rem);
 }
 
 .module-card {
@@ -565,6 +579,23 @@
   transform: translateY(-1px);
 }
 
+/* Responsive Grid Helper Classes */
+.data-driven-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.mascot-cta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
 /* Accordion */
 .accordion-item {
   border-bottom: 1px solid var(--border-color);
@@ -596,4 +627,173 @@
 
 .accordion-item.active .accordion-content {
   display: block;
+}
+
+/* Responsive Breakpoints & Overrides */
+@media (max-width: 1024px) {
+  .hero-content-wrapper {
+    gap: 2.5rem;
+    padding: 5rem 1.5rem 4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-content-wrapper {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 4rem 1.25rem 3rem;
+    gap: 2.5rem;
+  }
+
+  .hero-ctas {
+    justify-content: center;
+  }
+
+  .hero-image-container {
+    margin-top: 1.5rem;
+  }
+
+  .problem-card {
+    padding: clamp(1.25rem, 4vw, 2rem);
+  }
+
+  .problem-text {
+    font-size: clamp(1rem, 3.5vw, 1.15rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-ctas {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-ctas > a {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Consultant Row Styles (Contact Page) */
+.consultant-row {
+  display: grid;
+  grid-template-columns: 2.1fr 0.9fr;
+  gap: 2.5rem;
+  align-items: stretch;
+}
+
+@media (max-width: 850px) {
+  .consultant-row {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem;
+  }
+}
+
+/* Use Case Detail Page Custom Grid Styles */
+.three-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.doc-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem 3rem;
+}
+
+.doc-details-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2.5rem 2rem;
+}
+
+@media (max-width: 900px) {
+  .three-cards-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .doc-details-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+  .doc-details-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+  .doc-span-col {
+    grid-column: auto !important;
+  }
+}
+
+/* Pricing Page Process Banner Responsive Style */
+@media (max-width: 768px) {
+  .pricing-process-banner {
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    text-align: center;
+    padding: 2rem 1.5rem !important;
+  }
+  .pricing-process-banner > div {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+  .pricing-process-banner div[style*="flexGrow"] {
+    display: none !important; /* Hide dashed line on mobile */
+  }
+}
+
+/* Timeline Responsive Style */
+.timeline-container {
+  position: relative;
+  max-width: 1000px;
+  margin: 4rem auto;
+  padding: 2rem 0;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-50%);
+}
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 1fr;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+
+@media (max-width: 850px) {
+  .timeline-line {
+    left: 20px !important;
+    transform: none !important;
+  }
+  .timeline-row {
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-start !important;
+    padding-left: 50px;
+    position: relative;
+    margin-bottom: 3rem !important;
+  }
+  .timeline-node-col {
+    position: absolute !important;
+    left: 10px !important;
+    top: 5px !important;
+  }
+  .timeline-card-col {
+    order: 2 !important;
+    text-align: left !important;
+    width: 100% !important;
+  }
+  .timeline-label-col {
+    order: 1 !important;
+    text-align: left !important;
+    padding: 0 0 0.5rem 0 !important;
+    width: 100% !important;
+  }
 }

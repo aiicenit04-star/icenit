@@ -2,6 +2,7 @@ import { db, contactSubmissions, demoRequests, jobApplications } from "@/db/clie
 import { sql } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export default async function AdminDashboard() {
   const [contactsCountResult] = await db

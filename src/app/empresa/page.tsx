@@ -1,101 +1,150 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Link from "next/link";
 import "../public.css";
 
 export default function EmpresaPage() {
-  const team = [
-    {
-      name: "Javier Pinto Jaén",
-      role: "Socio Fundador - Especialista SSO",
-      desc: "Más de 20 años de experiencia en consultoría industrial, investigación de incidentes y estrategias de seguridad y salud ocupacional.",
-    },
-    {
-      name: "Pablo Herrera Dimter",
-      role: "Socio Fundador - Transformación Digital",
-      desc: "Especialista en arquitectura tecnológica cloud, analítica avanzada y desarrollo de soluciones industriales aplicadas a operaciones críticas.",
-    },
-    {
-      name: "Mario Demarchi Rosa",
-      role: "Socio - Operaciones & QA/QC",
-      desc: "Dirección de proyectos de software, aseguramiento de la calidad e implementación ágil en empresas del sector energía y minería.",
-    },
-  ];
-
   return (
     <>
       <Header />
 
       <main className="page-section" style={{ flexGrow: 1 }}>
-        <div className="section-header" style={{ marginBottom: "5rem" }}>
-          <span className="section-subtitle">Nuestra Empresa</span>
-          <h1 className="section-title" style={{ fontSize: "3.5rem" }}>
-            Propósito e Historia
+        
+        {/* Propósito Section */}
+        <section style={{ marginBottom: "6rem", textAlign: "center", paddingTop: "2rem" }}>
+          <h1 className="section-title" style={{ fontSize: "3.5rem", marginBottom: "2rem" }}>
+            Propósito
           </h1>
-          <p style={{ color: "var(--text-secondary)", maxWidth: "600px", margin: "1rem auto 0", lineHeight: "1.6" }}>
+          <p style={{ fontSize: "1.4rem", fontWeight: "700", color: "#fff", maxWidth: "900px", margin: "0 auto 1.75rem", lineHeight: "1.5" }}>
             Estamos convencidos de que el futuro de la seguridad se construye transformando experiencia, procesos y datos en inteligencia aplicada.
           </p>
-        </div>
-
-        {/* Purpose */}
-        <section className="problem-card" style={{ marginBottom: "5rem", textAlign: "center", padding: "3.5rem" }}>
-          <h2 style={{ fontFamily: "var(--font-title)", marginBottom: "1.5rem", fontSize: "2rem" }}>Nuestro Propósito</h2>
-          <p style={{ fontSize: "1.2rem", lineHeight: "1.8", color: "var(--text-primary)", fontWeight: "500" }}>
-            Convertir información histórica y actual en decisiones proactivo-predictivas para organizaciones más seguras, inteligentes y capaces de aprender continuamente.
+          <p style={{ fontSize: "1.05rem", color: "var(--text-secondary)", maxWidth: "850px", margin: "0 auto", lineHeight: "1.7" }}>
+            En iCenit ya estamos abriendo un camino único y disruptivo en el mercado: convertir información histórica y actual en decisiones proactivo-predictivas para organizaciones más seguras, inteligentes y capaces de aprender continuamente.
           </p>
         </section>
 
-        {/* History timeline */}
-        <section style={{ marginBottom: "6rem" }}>
-          <div className="section-header" style={{ marginBottom: "3rem" }}>
-            <h2 className="section-title" style={{ fontSize: "2rem" }}>Nuestra Trayectoria</h2>
+        {/* Historia Section (Timeline) */}
+        <section style={{ marginBottom: "7rem", borderTop: "1px solid var(--border-color)", paddingTop: "5rem" }}>
+          <div className="section-header" style={{ marginBottom: "3rem", textAlign: "left" }}>
+            <h2 className="section-title" style={{ fontSize: "2.8rem", textAlign: "left" }}>
+              Historia
+            </h2>
           </div>
-          <div className="how-it-works-grid" style={{ gridTemplateColumns: "1fr 1fr 1fr" }}>
-            <div className="step-card">
-              <span className="step-number" style={{ fontSize: "2rem", color: "rgba(37,99,235,0.2)" }}>20+ años</span>
-              <h3 className="step-title" style={{ color: "#fff" }}>Cenit Consultores</h3>
-              <p className="step-desc" style={{ fontSize: "0.95rem" }}>
-                Nace CENIT Consultores, especializada en seguridad, investigación de incidentes, riesgos operacionales y desarrollo de capacidades. Nace el aprendizaje clave: la calidad de la información es esencial para generar buenos análisis.
+
+          <div className="timeline-container">
+            {/* Symmetrical vertical line */}
+            <div className="timeline-line"></div>
+
+            {/* Node 1: Cenit Consultores */}
+            <div className="timeline-row">
+              {/* Left Column: Card */}
+              <div className="timeline-card-col" style={{ display: "flex", justifyContent: "flex-end" }}>
+                <div className="glass-panel" style={{ padding: "2.2rem", maxWidth: "450px" }}>
+                  <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem", lineHeight: "1.6", margin: "0 0 1.25rem" }}>
+                    Hace más de 20 años nace CENIT Consultores, especializada en seguridad, investigación de incidentes, riesgos operacionales y desarrollo de capacidades para grandes organizaciones nacionales e internacionales.
+                  </p>
+                  <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem", lineHeight: "1.6", margin: 0 }}>
+                    De esa trayectoria surgió un aprendizaje clave: la calidad de la información es esencial para generar buenos análisis, mejores decisiones y aprendizajes reales.
+                  </p>
+                </div>
+              </div>
+
+              {/* Middle Column: Node */}
+              <div className="timeline-node-col" style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative", zIndex: 2 }}>
+                <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#FF4100", border: "4px solid #05070c", boxShadow: "0 0 0 4px #FF4100" }}></div>
+              </div>
+
+              {/* Right Column: Label */}
+              <div className="timeline-label-col" style={{ textAlign: "left", paddingLeft: "1.5rem" }}>
+                <span style={{ color: "#FF4100", fontWeight: "700", letterSpacing: "1.2px", textTransform: "uppercase", fontSize: "1.05rem" }}>
+                  CENIT CONSULTORES
+                </span>
+              </div>
+            </div>
+
+            {/* Node 2: iCenit */}
+            <div className="timeline-row">
+              {/* Left Column: Label */}
+              <div className="timeline-label-col" style={{ textAlign: "right", paddingRight: "1.5rem" }}>
+                <span style={{ color: "#FF4100", fontWeight: "700", letterSpacing: "1.2px", textTransform: "uppercase", fontSize: "1.05rem" }}>
+                  ICENIT
+                </span>
+              </div>
+
+              {/* Middle Column: Node */}
+              <div className="timeline-node-col" style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative", zIndex: 2 }}>
+                <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#FF4100", border: "4px solid #05070c", boxShadow: "0 0 0 4px #FF4100" }}></div>
+              </div>
+
+              {/* Right Column: Card */}
+              <div className="timeline-card-col" style={{ display: "flex", justifyContent: "flex-start" }}>
+                <div className="glass-panel" style={{ padding: "2.2rem", maxWidth: "450px" }}>
+                  <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem", lineHeight: "1.6", margin: "0 0 1.25rem" }}>
+                    Hace cinco años, esa experiencia se cruza con una visión digital clara: combinar experiencia humana, procesos estructurados y datos de calidad para resolver problemas complejos y avanzar hacia una gestión capaz de anticiparse.
+                  </p>
+                  <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem", lineHeight: "1.6", margin: 0 }}>
+                    Así nace iCenit, una plataforma modular, inteligente y especializada en riesgos de seguridad y medio ambiente, creada para transformar la gestión desde un enfoque reactivo hacia uno más preventivo, analítico y habilitador de capacidades predictivas.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Node 3: Hoy */}
+            <div className="timeline-row" style={{ marginBottom: 0 }}>
+              {/* Left Column: Card */}
+              <div className="timeline-card-col" style={{ display: "flex", justifyContent: "flex-end" }}>
+                <div className="glass-panel" style={{ padding: "2.2rem", maxWidth: "450px" }}>
+                  <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem", lineHeight: "1.6", margin: 0 }}>
+                    Hoy seguimos evolucionando con un propósito claro: convertir datos y experiencia en decisiones que ayuden a construir organizaciones más seguras, inteligentes y con mayor capacidad de aprendizaje continuo.
+                  </p>
+                </div>
+              </div>
+
+              {/* Middle Column: Node */}
+              <div className="timeline-node-col" style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative", zIndex: 2 }}>
+                <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#FF4100", border: "4px solid #05070c", boxShadow: "0 0 0 4px #FF4100" }}></div>
+              </div>
+
+              {/* Right Column: Label */}
+              <div className="timeline-label-col" style={{ textAlign: "left", paddingLeft: "1.5rem" }}>
+                <span style={{ color: "#FF4100", fontWeight: "700", letterSpacing: "1.2px", textTransform: "uppercase", fontSize: "1.05rem" }}>
+                  HOY
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* Nuestro Equipo Section */}
+        <section style={{ marginBottom: "4rem", borderTop: "1px solid var(--border-color)", paddingTop: "5rem" }}>
+          <div style={{ marginBottom: "3.5rem", textAlign: "left" }}>
+            <h2 className="section-title" style={{ fontSize: "2.8rem", textAlign: "left", marginBottom: "1rem" }}>
+              Nuestro Equipo
+            </h2>
+            <p style={{ color: "var(--text-secondary)", fontSize: "1.15rem", lineHeight: "1.6", maxWidth: "900px" }}>
+              iCenit reúne experiencia en seguridad y salud ocupacional, analítica avanzada, transformación digital e implementación de soluciones industriales.
+            </p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "3rem" }} className="consultant-row">
+            <div>
+              <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.7", margin: 0 }}>
+                El equipo es liderado por socios con más de 20 años de trayectoria en SSO, gestión de proyectos digitales, consultoría industrial y desarrollo de plataformas tecnológicas para grandes organizaciones en Chile y Sudamérica.
               </p>
             </div>
-            <div className="step-card">
-              <span className="step-number" style={{ fontSize: "2rem", color: "rgba(37,99,235,0.2)" }}>5 años</span>
-              <h3 className="step-title" style={{ color: "#fff" }}>Nace iCenit</h3>
-              <p className="step-desc" style={{ fontSize: "0.95rem" }}>
-                Se fusiona la experiencia SSO con la visión digital. Nace iCenit: una plataforma modular, inteligente y especializada en riesgos de seguridad y medio ambiente para transformar la gestión reactiva en preventiva.
+            <div>
+              <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.7", margin: 0 }}>
+                Complementamos esta experiencia con un equipo técnico especializado en arquitectura cloud, desarrollo de aplicaciones, inteligencia artificial y QA/QC, asegurando soluciones robustas, escalables y orientadas a resultados reales.
               </p>
             </div>
-            <div className="step-card" style={{ borderRightColor: "var(--accent-blue-light)" }}>
-              <span className="step-number" style={{ fontSize: "2rem", color: "var(--accent-blue-light)" }}>Hoy</span>
-              <h3 className="step-title" style={{ color: "var(--accent-blue-light)" }}>Evolución Continua</h3>
-              <p className="step-desc" style={{ fontSize: "0.95rem" }}>
-                Convertimos datos y experiencia en decisiones rápidas y eficaces que ayudan a construir organizaciones seguras, inteligentes y con una gran cultura de aprendizaje organizacional.
+            <div>
+              <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.7", margin: 0 }}>
+                Esta combinación nos permite acompañar al cliente desde la definición estratégica hasta la implementación y uso efectivo de la plataforma.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Team Grid */}
-        <section style={{ marginBottom: "3rem" }}>
-          <div className="section-header" style={{ marginBottom: "4rem" }}>
-            <span className="section-subtitle">Equipo</span>
-            <h2 className="section-title" style={{ fontSize: "2.5rem" }}>Liderazgo y Experiencia</h2>
-            <p style={{ color: "var(--text-secondary)", maxWidth: "600px", margin: "1rem auto 0", fontSize: "0.95rem" }}>
-              Combinamos consultores senior de seguridad industrial con ingenieros expertos en analítica de datos, inteligencia artificial y arquitectura de software.
-            </p>
-          </div>
-          <div className="how-it-works-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}>
-            {team.map((t, idx) => (
-              <div key={idx} className="step-card" style={{ background: "rgba(17,24,39,0.6)" }}>
-                <h3 className="step-title" style={{ color: "#fff", marginBottom: "0.25rem" }}>{t.name}</h3>
-                <span style={{ fontSize: "0.85rem", color: "var(--accent-blue-light)", fontWeight: 600, display: "block", marginBottom: "1.25rem" }}>
-                  {t.role}
-                </span>
-                <p className="step-desc" style={{ fontSize: "0.9rem" }}>{t.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
       </main>
 
       <Footer />

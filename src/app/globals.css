@@ -8,8 +8,8 @@
 :root {
   --bg-dark: #05070c;
   --bg-dark-rgb: 5, 7, 12;
-  --bg-card: rgba(15, 23, 42, 0.7);
-  --bg-card-hover: rgba(30, 41, 59, 0.85);
+  --bg-card: rgba(15, 23, 42, 0.3);
+  --bg-card-hover: rgba(30, 41, 59, 0.45);
   
   --text-primary: #f3f4f6;
   --text-secondary: #9ca3af;

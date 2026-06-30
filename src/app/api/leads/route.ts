@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { db, contactSubmissions, demoRequests, jobApplications } from "@/db/client";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export async function POST(req: Request) {
   try {
@@ -26,18 +27,10 @@ export async function POST(req: Request) {
           );
         }
 
-        // Save file to public/uploads
+        // Convert file to Base64 Data URL for serverless/edge compatibility (no local disk)
         const bytes = await cvFile.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
-        const uploadDir = path.join(process.cwd(), "public", "uploads");
-        await mkdir(uploadDir, { recursive: true });
-
-        const fileName = `${Date.now()}-${cvFile.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-        const filePath = path.join(uploadDir, fileName);
-        await writeFile(filePath, buffer);
-
-        const cvUrl = `/uploads/${fileName}`;
+        const base64String = Buffer.from(bytes).toString("base64");
+        const cvUrl = `data:${cvFile.type || "application/pdf"};base64,${base64String}`;
 
         // Insert into database
         await db.insert(jobApplications).values({

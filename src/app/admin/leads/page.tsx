@@ -2,6 +2,7 @@ import { db, contactSubmissions, demoRequests, jobApplications } from "@/db/clie
 import { desc } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export default async function AdminLeads() {
   const contacts = await db
@@ -137,11 +138,10 @@ export default async function AdminLeads() {
                     <td>
                       <a
                         href={a.cvUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: "#3b82f6", textDecoration: "underline" }}
+                        download={`CV_${a.name.replace(/[^a-zA-Z0-9]/g, "_")}.pdf`}
+                        style={{ color: "#FF4100", textDecoration: "underline", fontWeight: "600" }}
                       >
-                        Ver Currículum
+                        Descargar CV
                       </a>
                     </td>
                     <td>{a.createdAt}</td>

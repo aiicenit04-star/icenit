@@ -2,7 +2,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { db, modules, useCases } from "@/db/client";
-import WaveBackground from "@/components/WaveBackground";
 import "./public.css";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +17,6 @@ export default async function Home() {
       <main style={{ flexGrow: 1 }}>
         {/* Hero Section */}
         <section className="hero-section">
-          <WaveBackground />
           <div className="hero-content-wrapper">
             <div>
               <div className="hero-tag">James AI Assistant®</div>
@@ -43,11 +41,10 @@ export default async function Home() {
                 alt="James - Asistente de IA de iCenit" 
                 className="hero-image" 
                 style={{ 
-                  maxHeight: "360px", 
                   width: "auto", 
                   display: "block",
-                  maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%)",
-                  WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%)"
+                  maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%)",
+                  WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%)"
                 }} 
               />
             </div>
@@ -214,8 +211,8 @@ export default async function Home() {
         </section>
 
         {/* Mascot Call to Action Section */}
-        <section className="page-section" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,65,0,0.02) 100%)", borderTop: "1px solid var(--border-color)", borderBottom: "1px solid var(--border-color)", padding: "5rem 2rem" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "4rem", alignItems: "center", maxWidth: "1000px", margin: "0 auto" }}>
+        <section className="page-section" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,65,0,0.02) 100%)", padding: "5rem 2rem" }}>
+          <div className="mascot-cta-grid">
             
             {/* Left: Mascot Image */}
             <div style={{ display: "flex", justifyContent: "center", position: "relative" }}>
@@ -293,8 +290,11 @@ export default async function Home() {
 
         {/* Data Driven Section */}
         <section className="page-section" style={{ background: "rgba(255,255,255,0.01)" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "4rem", alignItems: "center" }}>
+          <div className="data-driven-grid">
             <div>
+              <span className="section-subtitle" style={{ textAlign: "left" }}>
+                PLATAFORMA JAMES CLOUD PLATFORM
+              </span>
               <h2 className="section-title" style={{ textAlign: "left", marginBottom: "1.5rem" }}>
                 ¿Qué significa ser una plataforma Data Driven?
               </h2>
@@ -307,37 +307,71 @@ export default async function Home() {
                 Esto permite detectar riesgos antes de que se materialicen y actuar con mayor precisión.
               </p>
             </div>
-            <div className="glass-panel" style={{ padding: "3rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
-              <div style={{ padding: "1rem", borderLeft: "4px solid var(--accent-blue)", background: "rgba(255,255,255,0.02)" }}>
-                <strong style={{ display: "block", marginBottom: "0.25rem" }}>Predicción Temprana</strong>
-                <span style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>Algoritmos avanzados que anticipan el próximo incidente.</span>
-              </div>
-              <div style={{ padding: "1rem", borderLeft: "4px solid var(--accent-green)", background: "rgba(255,255,255,0.02)" }}>
-                <strong style={{ display: "block", marginBottom: "0.25rem" }}>Evidencia Concreta</strong>
-                <span style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>Decisiones respaldadas por telemetría e histórico operativo.</span>
-              </div>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <img 
+                src="/ilustracion-grafico-icenit-vectorial.svg" 
+                alt="Ilustración Plataforma James Cloud" 
+                style={{ width: "100%", height: "auto", maxWidth: "600px", display: "block" }} 
+              />
             </div>
           </div>
         </section>
 
         {/* Cases Section */}
         <section className="page-section">
-          <div className="section-header">
-            <span className="section-subtitle">Casos de Éxito</span>
-            <h2 className="section-title">Resultados validados en terreno</h2>
+          <div className="section-header" style={{ marginBottom: "3rem" }}>
+            <span className="section-subtitle">Casos de Uso</span>
+            <h2 className="section-title">Casos reales, resultados concretos</h2>
+            <p className="section-desc" style={{ maxWidth: "700px", margin: "0.75rem auto 0" }}>
+              Con James, las organizaciones detectan patrones críticos, reducen incidentes y actúan más rápido.
+            </p>
           </div>
-          <div className="how-it-works-grid">
-            {allCases.map((c) => (
-              <div key={c.id} className="step-card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                <div>
-                  <h3 className="step-title" style={{ color: "#fff" }}>{c.title}</h3>
-                  <p className="step-desc" style={{ fontSize: "0.9rem" }}>{c.context}</p>
+          <div className="how-it-works-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem" }}>
+            {allCases.map((c) => {
+              const caseImages: Record<string, string> = {
+                "investigacion-de-accidente": "/caso-1.png",
+                "analisis-multivariable": "/caso-2.png",
+                "gestion-1-3-10": "/caso-3.png"
+              };
+              return (
+                <div key={c.id} className="step-card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 0, overflow: "hidden" }}>
+                  <div>
+                    <div style={{ position: "relative", width: "100%", height: "220px", overflow: "hidden" }}>
+                      <img 
+                        src={caseImages[c.id] || "/caso-1.png"} 
+                        alt={c.title} 
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} 
+                      />
+                    </div>
+                    <div style={{ padding: "2rem 2rem 1rem 2rem" }}>
+                      <h3 className="step-title" style={{ color: "#fff", marginTop: 0, marginBottom: "0.75rem", fontSize: "1.25rem", textAlign: "left" }}>
+                        {c.title}
+                      </h3>
+                      <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: "1.6", textAlign: "left" }}>
+                        {c.context}
+                      </p>
+                    </div>
+                  </div>
+                  <div style={{ padding: "0 2rem 2rem 2rem" }}>
+                    <Link 
+                      href={`/casos-de-uso/${c.id}`} 
+                      style={{ 
+                        display: "inline-flex", 
+                        alignItems: "center", 
+                        color: "var(--accent-blue-light)", 
+                        fontWeight: "700", 
+                        textDecoration: "none", 
+                        fontSize: "0.8rem", 
+                        letterSpacing: "1px", 
+                        textTransform: "uppercase" 
+                      }}
+                    >
+                      Ver Caso de Uso <span style={{ marginLeft: "0.5rem", fontSize: "0.95rem", fontWeight: "bold" }}>&gt;</span>
+                    </Link>
+                  </div>
                 </div>
-                <Link href={`/modulos/casos?case=${c.id}`} className="module-link" style={{ marginTop: "1.5rem" }}>
-                  Ver Caso Completo &rarr;
-                </Link>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
