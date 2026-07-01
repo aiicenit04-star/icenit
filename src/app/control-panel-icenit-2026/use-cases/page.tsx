@@ -30,7 +30,7 @@ export default async function UseCasesAdminPage({ searchParams }: UseCasesAdminP
         {allUseCases.map((uc) => (
           <Link
             key={uc.id}
-            href={`/admin/use-cases?selected=${uc.id}`}
+            href={`/control-panel-icenit-2026/use-cases?selected=${uc.id}`}
             className={`admin-tab ${selectedSlug === uc.id ? "active" : ""}`}
             style={{ textDecoration: "none", textAlign: "center" }}
           >

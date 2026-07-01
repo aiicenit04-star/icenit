@@ -28,19 +28,19 @@ export default async function AdminLayout({
           <span style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fff" }}>Admin</span>
         </div>
         <nav className="admin-nav">
-          <Link href="/admin" className="admin-nav-item">
+          <Link href="/control-panel-icenit-2026" className="admin-nav-item">
             Dashboard
           </Link>
-          <Link href="/admin/leads" className="admin-nav-item">
+          <Link href="/control-panel-icenit-2026/leads" className="admin-nav-item">
             Leads y Formularios
           </Link>
-          <Link href="/admin/modules" className="admin-nav-item">
+          <Link href="/control-panel-icenit-2026/modules" className="admin-nav-item">
             Editar Módulos
           </Link>
-          <Link href="/admin/use-cases" className="admin-nav-item">
+          <Link href="/control-panel-icenit-2026/use-cases" className="admin-nav-item">
             Editar Casos de Uso
           </Link>
-          <Link href="/admin/settings" className="admin-nav-item">
+          <Link href="/control-panel-icenit-2026/settings" className="admin-nav-item">
             Configuración del Sitio
           </Link>
           <Link href="/" className="admin-nav-item" target="_blank" style={{ marginTop: "1rem", borderTop: "1px solid rgba(255,255,255,0.04)", paddingTop: "1rem" }}>

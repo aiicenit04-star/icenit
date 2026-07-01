@@ -41,7 +41,7 @@ export default async function ModulesAdminPage({ searchParams }: ModulesAdminPag
         {allModules.map((m) => (
           <Link
             key={m.id}
-            href={`/admin/modules?selected=${m.id}`}
+            href={`/control-panel-icenit-2026/modules?selected=${m.id}`}
             className={`admin-tab ${selectedSlug === m.id ? "active" : ""}`}
             style={{ textDecoration: "none", textAlign: "center" }}
           >

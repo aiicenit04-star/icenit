@@ -26,7 +26,7 @@ export default function LoginForm() {
             type="password"
             className="admin-input"
             required
-            placeholder="Ingresa admin1234"
+            placeholder="Contraseña"
           />
         </div>
         {state?.error && (
