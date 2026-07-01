@@ -2,9 +2,11 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
 
-let _db: any = null;
+type DrizzleDBType = ReturnType<typeof drizzle<typeof schema>>;
 
-function getDB() {
+let _db: DrizzleDBType | null = null;
+
+function getDB(): DrizzleDBType {
   if (!_db) {
     const connectionString = process.env.DATABASE_URL || "postgres://postgres:postgres@localhost:5432/postgres";
     // Initialize postgres client inside the function to defer socket connection
@@ -21,7 +23,7 @@ export const db = new Proxy({} as any, {
     const actualDb = getDB();
     return Reflect.get(actualDb, prop, receiver);
   }
-});
+}) as unknown as DrizzleDBType;
 
 export type DBType = typeof db;
 export * from "./schema";
