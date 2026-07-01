@@ -8,7 +8,7 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (state?.success) {
-      window.location.reload();
+      window.location.href = "/control-panel-icenit-2026";
     }
   }, [state]);
 

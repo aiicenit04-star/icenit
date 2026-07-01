@@ -17,7 +17,7 @@ export async function login(prevState: any, formData: FormData) {
       maxAge: 60 * 60 * 24, // 1 day
       path: "/",
     });
-    redirect("/control-panel-icenit-2026");
+    return { success: true };
   }
   return { success: false, error: "Contraseña incorrecta" };
 }
