@@ -101,7 +101,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <img src="/james-clean-footer.png" alt="James Waving" className="footer-robot" />
+      <img src="/james-clean-footer.webp" alt="James Waving" className="footer-robot" />
     </footer>
   );
 }

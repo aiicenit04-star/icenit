@@ -37,8 +37,9 @@ export default async function Home() {
             </div>
             <div className="hero-image-container animate-fade-in-up delay-3" style={{ background: "transparent", border: "none", boxShadow: "none", display: "flex", justifyContent: "center", alignSelf: "end" }}>
               <img 
-                src="/james-robot.png" 
+                src="/james-robot.webp" 
                 alt="James - Asistente de IA de iCenit" 
+                fetchPriority="high"
                 className="hero-image" 
                 style={{ 
                   width: "auto", 
@@ -159,9 +160,10 @@ export default async function Home() {
               <div>
                 <div style={{ position: "relative", width: "100%", height: "210px", overflow: "hidden" }}>
                   <img 
-                    src="/grupo-analitica-avanzada-v3.png" 
+                    src="/grupo-analitica-avanzada-v3.webp" 
                     alt="Analítica Avanzada" 
                     className="category-card-img"
+                    loading="lazy"
                   />
                 </div>
                 <div className="category-card-title-container">
@@ -175,9 +177,10 @@ export default async function Home() {
               <div>
                 <div style={{ position: "relative", width: "100%", height: "210px", overflow: "hidden" }}>
                   <img 
-                    src="/grupo-aplicaciones-v3.png" 
+                    src="/grupo-aplicaciones-v3.webp" 
                     alt="Aplicaciones" 
                     className="category-card-img"
+                    loading="lazy"
                   />
                 </div>
                 <div className="category-card-title-container">
@@ -191,9 +194,10 @@ export default async function Home() {
               <div>
                 <div style={{ position: "relative", width: "100%", height: "210px", overflow: "hidden" }}>
                   <img 
-                    src="/grupo-apoyo-a-la-gestion-v3.png" 
+                    src="/grupo-apoyo-a-la-gestion-v3.webp" 
                     alt="Apoyo a la Gestión" 
                     className="category-card-img"
+                    loading="lazy"
                   />
                 </div>
                 <div className="category-card-title-container">
@@ -217,8 +221,9 @@ export default async function Home() {
             {/* Left: Mascot Image */}
             <div style={{ display: "flex", justifyContent: "center", position: "relative" }}>
               <img 
-                src="/james-robot-v3.png" 
+                src="/james-robot-v3.webp" 
                 alt="James AI Assistant" 
+                loading="lazy"
                 style={{ 
                   width: "100%", 
                   maxWidth: "320px", 
@@ -329,17 +334,18 @@ export default async function Home() {
           <div className="how-it-works-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem" }}>
             {allCases.map((c) => {
               const caseImages: Record<string, string> = {
-                "investigacion-de-accidente": "/caso-1.png",
-                "analisis-multivariable": "/caso-2.png",
-                "gestion-1-3-10": "/caso-3.png"
+                "investigacion-de-accidente": "/caso-1.webp",
+                "analisis-multivariable": "/caso-2.webp",
+                "gestion-1-3-10": "/caso-3.webp"
               };
               return (
                 <div key={c.id} className="step-card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 0, overflow: "hidden" }}>
                   <div>
                     <div style={{ position: "relative", width: "100%", height: "220px", overflow: "hidden" }}>
                       <img 
-                        src={caseImages[c.id] || "/caso-1.png"} 
+                        src={caseImages[c.id] || "/caso-1.webp"} 
                         alt={c.title} 
+                        loading="lazy"
                         style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} 
                       />
                     </div>
