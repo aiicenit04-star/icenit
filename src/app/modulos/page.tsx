@@ -5,8 +5,7 @@ import { db, modules } from "@/db/client";
 import { eq } from "drizzle-orm";
 import "../public.css";
 
-export const dynamic = "force-dynamic";
-export const runtime = "edge";
+
 
 function getModuleIcon(id: string) {
   const strokeWidth = 0.95;

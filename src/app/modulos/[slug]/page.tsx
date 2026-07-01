@@ -6,8 +6,10 @@ import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import "../../public.css";
 
-export const dynamic = "force-dynamic";
-export const runtime = "edge";
+export async function generateStaticParams() {
+  const allModules = await db.select({ id: modules.id }).from(modules);
+  return allModules.map((m) => ({ slug: m.id }));
+}
 
 interface ModulePageProps {
   params: Promise<{
