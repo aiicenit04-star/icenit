@@ -21,6 +21,28 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon-icenit.png",
   },
+  openGraph: {
+    title: "iCenit.ai — JAMES AI ASSISTANT®",
+    description: "Transformamos datos en decisiones que anticipan riesgos en seguridad y medio ambiente. Inteligencia validada por expertos para proteger vidas y operaciones.",
+    url: "https://www.icenit.ai",
+    siteName: "iCenit",
+    images: [
+      {
+        url: "https://www.icenit.ai/james-share.jpg",
+        width: 800,
+        height: 800,
+        alt: "James - Asistente de IA de iCenit",
+      },
+    ],
+    locale: "es_CL",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "iCenit.ai — JAMES AI ASSISTANT®",
+    description: "Transformamos datos en decisiones que anticipan riesgos en seguridad y medio ambiente. Inteligencia validada por expertos para proteger vidas y operaciones.",
+    images: ["https://www.icenit.ai/james-share.jpg"],
+  },
 };
 
 export default function RootLayout({
