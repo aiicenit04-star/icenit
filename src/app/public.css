@@ -873,24 +873,32 @@
 .delay-7 { animation-delay: 0.7s; }
 .delay-8 { animation-delay: 0.8s; }
 
-/* Client Logos Section */
-.client-logos-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
+/* Client Logos Grid Section */
+.client-logos-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2.5rem;
+  max-width: 1000px;
+  margin: 3rem auto 0;
+  align-items: center;
+  justify-items: center;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
-  padding-top: 2rem;
-  overflow: hidden;
+  padding-top: 3rem;
   width: 100%;
 }
 
-.client-logos-img {
-  max-width: 850px;
-  width: 100%;
-  height: auto;
-  opacity: 0.8;
+.client-logo-item {
+  height: 28px;
+  width: auto;
+  opacity: 0.7;
   mix-blend-mode: lighten;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  object-fit: contain;
+}
+
+.client-logo-item:hover {
+  opacity: 1;
+  transform: scale(1.05);
 }
 
 /* Mobile Responsive Stats & Logos Overrides */
@@ -910,10 +918,15 @@
     font-size: 0.65rem !important;
     letter-spacing: 0.5px !important;
   }
-  .client-logos-img {
-    width: 125% !important;
-    max-width: none !important;
-    transform: scale(1.1);
+  .client-logos-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 2.5rem 1.5rem !important;
+    margin-top: 2rem !important;
+    padding-top: 2rem !important;
+    max-width: 320px;
+  }
+  .client-logo-item {
+    height: 24px !important;
   }
 }
 

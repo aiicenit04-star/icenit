@@ -143,8 +143,17 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="client-logos-container">
-            <img src="/client-logos.png" alt="Logos de empresas líderes" className="client-logos-img" />
+          <div className="client-logos-grid animate-fade-in-up delay-6">
+            <img src="/logo-glencore.png" alt="Glencore" className="client-logo-item" loading="lazy" />
+            <img src="/logo-flsmidth.png" alt="FLSmidth" className="client-logo-item" loading="lazy" />
+            <img src="/logo-copec.png" alt="Copec" className="client-logo-item" loading="lazy" />
+            <img src="/logo-enap.png" alt="ENAP" className="client-logo-item" loading="lazy" />
+            <img src="/logo-arauco.png" alt="Arauco" className="client-logo-item" loading="lazy" />
+            <img src="/logo-antofagasta.png" alt="Antofagasta Minerals" className="client-logo-item" loading="lazy" />
+            <img src="/logo-mutual.png" alt="Mutual de Seguridad" className="client-logo-item" loading="lazy" />
+            <img src="/logo-cmpc.png" alt="CMPC" className="client-logo-item" loading="lazy" />
+            <img src="/logo-codelco.png" alt="Codelco" className="client-logo-item" loading="lazy" />
+            <img src="/logo-bhp.png" alt="BHP" className="client-logo-item" loading="lazy" />
           </div>
         </section>
 
