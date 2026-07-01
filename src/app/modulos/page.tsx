@@ -125,7 +125,7 @@ export default async function ModulosPage() {
       <Header />
 
       <main className="page-section" style={{ flexGrow: 1 }}>
-        <div className="section-header" style={{ marginBottom: "5rem" }}>
+        <div className="section-header animate-fade-in-up" style={{ marginBottom: "5rem" }}>
           <span className="section-subtitle">James Cloud Platform</span>
           <h1 className="section-title" style={{ fontSize: "3rem" }}>
             Módulos y Aplicaciones
@@ -136,7 +136,7 @@ export default async function ModulosPage() {
         </div>
 
         {/* Category: Analítica Avanzada */}
-        <section style={{ marginBottom: "5rem" }}>
+        <section className="animate-fade-in-up delay-2" style={{ marginBottom: "5rem" }}>
           <div style={{ borderBottom: "1px solid var(--border-color)", paddingBottom: "1rem", marginBottom: "2.5rem" }}>
             <h2 className="section-title" style={{ textAlign: "left", fontSize: "1.8rem" }}>
               Módulos en Analítica Avanzada
@@ -184,7 +184,7 @@ export default async function ModulosPage() {
         </section>
 
         {/* Category: Aplicaciones */}
-        <section style={{ marginBottom: "5rem" }}>
+        <section className="animate-fade-in-up delay-4" style={{ marginBottom: "5rem" }}>
           <div style={{ borderBottom: "1px solid var(--border-color)", paddingBottom: "1rem", marginBottom: "2.5rem" }}>
             <h2 className="section-title" style={{ textAlign: "left", fontSize: "1.8rem" }}>
               Módulos en Aplicaciones
@@ -232,7 +232,7 @@ export default async function ModulosPage() {
         </section>
 
         {/* Category: Apoyo a la Gestión */}
-        <section style={{ marginBottom: "5rem" }}>
+        <section className="animate-fade-in-up delay-6" style={{ marginBottom: "5rem" }}>
           <div style={{ borderBottom: "1px solid var(--border-color)", paddingBottom: "1rem", marginBottom: "2.5rem" }}>
             <h2 className="section-title" style={{ textAlign: "left", fontSize: "1.8rem" }}>
               Módulos en Apoyo a la Gestión

@@ -156,7 +156,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <Header />
 
       <main className="page-section" style={{ flexGrow: 1 }}>
-        <div className="section-header" style={{ marginBottom: "4rem" }}>
+        <div className="section-header animate-fade-in-up" style={{ marginBottom: "4rem" }}>
           <span className="section-subtitle">Categoría de Módulos</span>
           <h1 className="section-title" style={{ fontSize: "3rem" }}>
             {categoryMeta.title}
@@ -166,13 +166,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </p>
         </div>
 
-        <div className="problem-card" style={{ marginBottom: "5rem", textAlign: "left", padding: "3rem" }}>
+        <div className="problem-card animate-fade-in-up delay-2" style={{ marginBottom: "5rem", textAlign: "left", padding: "3rem" }}>
           <p style={{ fontSize: "1.1rem", lineHeight: "1.7", color: "var(--text-primary)" }}>
             {categoryMeta.desc}
           </p>
         </div>
 
-        <div className="modules-grid">
+        <div className="modules-grid animate-fade-in-up delay-4">
           {categoryModules.map((m) => (
             <div key={m.id} className="module-card" style={{ padding: 0, overflow: "hidden" }}>
               <div>
@@ -210,7 +210,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           ))}
         </div>
 
-        <div style={{ textAlign: "center", marginTop: "4rem" }}>
+        <div className="animate-fade-in-up delay-6" style={{ textAlign: "center", marginTop: "4rem" }}>
           <Link href="/modulos" className="btn-secondary">
             &larr; Volver a Todos los Módulos
           </Link>

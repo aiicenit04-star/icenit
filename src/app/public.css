@@ -797,3 +797,124 @@
     width: 100% !important;
   }
 }
+
+/* ==========================================================================
+   Entrance & Reveal Animations
+   ========================================================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-right {
+  opacity: 0;
+  animation: fadeInRight 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-left {
+  opacity: 0;
+  animation: fadeInLeft 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  opacity: 0;
+  animation: fadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+.delay-6 { animation-delay: 0.6s; }
+.delay-7 { animation-delay: 0.7s; }
+.delay-8 { animation-delay: 0.8s; }
+
+/* Client Logos Section */
+.client-logos-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding-top: 2rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+.client-logos-img {
+  max-width: 850px;
+  width: 100%;
+  height: auto;
+  opacity: 0.8;
+  mix-blend-mode: lighten;
+  transition: transform 0.3s ease;
+}
+
+/* Mobile Responsive Stats & Logos Overrides */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.5rem !important;
+    padding: 1.5rem 0.5rem !important;
+  }
+  .stat-item {
+    gap: 0.2rem !important;
+  }
+  .stat-number {
+    font-size: 2.2rem !important;
+  }
+  .stat-label {
+    font-size: 0.65rem !important;
+    letter-spacing: 0.5px !important;
+  }
+  .client-logos-img {
+    width: 125% !important;
+    max-width: none !important;
+    transform: scale(1.1);
+  }
+}
+
+

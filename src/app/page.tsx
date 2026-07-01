@@ -18,15 +18,15 @@ export default async function Home() {
         {/* Hero Section */}
         <section className="hero-section">
           <div className="hero-content-wrapper">
-            <div>
-              <div className="hero-tag">James AI Assistant®</div>
-              <h1 className="hero-h1 text-gradient">
+            <div className="animate-fade-in-up">
+              <div className="hero-tag animate-fade-in-up delay-1">James AI Assistant®</div>
+              <h1 className="hero-h1 text-gradient animate-fade-in-up delay-2">
                 Transformamos datos en decisiones que anticipan riesgos en seguridad y medio ambiente
               </h1>
-              <p className="hero-sub">
+              <p className="hero-sub animate-fade-in-up delay-3">
                 Inteligencia validada por expertos para proteger vidas y operaciones.
               </p>
-              <div className="hero-ctas">
+              <div className="hero-ctas animate-fade-in-up delay-4">
                 <Link href="/empresa/contacto" className="btn-primary">
                   Habla con un experto icenit
                 </Link>
@@ -35,7 +35,7 @@ export default async function Home() {
                 </Link>
               </div>
             </div>
-            <div className="hero-image-container" style={{ background: "transparent", border: "none", boxShadow: "none", display: "flex", justifyContent: "center", alignSelf: "end" }}>
+            <div className="hero-image-container animate-fade-in-up delay-3" style={{ background: "transparent", border: "none", boxShadow: "none", display: "flex", justifyContent: "center", alignSelf: "end" }}>
               <img 
                 src="/james-robot.png" 
                 alt="James - Asistente de IA de iCenit" 
@@ -52,7 +52,7 @@ export default async function Home() {
         </section>
 
         {/* Problem Section */}
-        <section className="page-section" style={{ paddingTop: 0 }}>
+        <section className="page-section animate-fade-in-up delay-5" style={{ paddingTop: 0 }}>
           <div className="problem-card">
             <p className="problem-text">
               <span className="problem-highlight">
@@ -65,7 +65,7 @@ export default async function Home() {
         </section>
 
         {/* How It Works (01 / 03 / 10) */}
-        <section className="page-section" style={{ background: "rgba(255,255,255,0.01)" }}>
+        <section className="page-section animate-fade-in-up delay-6" style={{ background: "rgba(255,255,255,0.01)" }}>
           <div className="section-header">
             <span className="section-subtitle">Cómo lo hace James</span>
             <h2 className="section-title">De los datos al control total, en solo minutos</h2>
@@ -142,8 +142,8 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="client-logos-container" style={{ display: "flex", justifyContent: "center", marginTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.04)", paddingTop: "2rem" }}>
-            <img src="/client-logos.png" alt="Logos de empresas líderes" style={{ maxWidth: "850px", width: "100%", height: "auto", opacity: 0.8, mixBlendMode: "lighten" }} />
+          <div className="client-logos-container">
+            <img src="/client-logos.png" alt="Logos de empresas líderes" className="client-logos-img" />
           </div>
         </section>
 
@@ -211,7 +211,7 @@ export default async function Home() {
         </section>
 
         {/* Mascot Call to Action Section */}
-        <section className="page-section" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,65,0,0.02) 100%)", padding: "5rem 2rem" }}>
+        <section className="page-section animate-fade-in-up delay-6" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,65,0,0.02) 100%)", padding: "5rem 2rem" }}>
           <div className="mascot-cta-grid">
             
             {/* Left: Mascot Image */}
@@ -289,7 +289,7 @@ export default async function Home() {
         </section>
 
         {/* Data Driven Section */}
-        <section className="page-section" style={{ background: "rgba(255,255,255,0.01)" }}>
+        <section className="page-section animate-fade-in-up delay-7" style={{ background: "rgba(255,255,255,0.01)" }}>
           <div className="data-driven-grid">
             <div>
               <span className="section-subtitle" style={{ textAlign: "left" }}>
@@ -318,7 +318,7 @@ export default async function Home() {
         </section>
 
         {/* Cases Section */}
-        <section className="page-section">
+        <section className="page-section animate-fade-in-up delay-7">
           <div className="section-header" style={{ marginBottom: "3rem" }}>
             <span className="section-subtitle">Casos de Uso</span>
             <h2 className="section-title">Casos reales, resultados concretos</h2>
@@ -376,7 +376,7 @@ export default async function Home() {
         </section>
 
         {/* CTA Final */}
-        <section className="page-section" style={{ borderTop: "1px solid var(--border-color)", paddingBottom: "8rem" }}>
+        <section className="page-section animate-fade-in-up delay-8" style={{ borderTop: "1px solid var(--border-color)", paddingBottom: "8rem" }}>
           <div className="problem-card" style={{ background: "radial-gradient(circle at center, rgba(37,99,235,0.1) 0%, transparent 80%)" }}>
             <h2 className="section-title" style={{ marginBottom: "1rem" }}>
               JAMES AI ASSISTANT® — Hablemos del futuro de tu operación
