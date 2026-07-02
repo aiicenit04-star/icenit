@@ -10,6 +10,14 @@ type DrizzleDBType = ReturnType<typeof drizzle<typeof schema>>;
 // This prevents reusing stale/closed TCP connections across requests in frozen Cloudflare Workers isolates.
 export const getDB = cache((): DrizzleDBType => {
   let connectionString = process.env.DATABASE_URL || "postgresql://postgres:Icenit2026!@db.qksigxubxkecqffdcgcu.supabase.co:5432/postgres";
+  
+  // Auto-rewrite pooler connection string to direct connection for Cloudflare Workers compatibility
+  if (connectionString.includes("pooler.supabase.com:6543")) {
+    connectionString = connectionString
+      .replace("postgres.qksigxubxkecqffdcgcu", "postgres")
+      .replace("aws-1-us-east-2.pooler.supabase.com:6543", "db.qksigxubxkecqffdcgcu.supabase.co:5432");
+  }
+
   // Ensure sslmode=require is appended for Cloudflare Workers compatibility
   if (!connectionString.includes("sslmode=")) {
     connectionString += connectionString.includes("?") ? "&sslmode=require" : "?sslmode=require";
