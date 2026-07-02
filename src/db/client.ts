@@ -9,7 +9,7 @@ type DrizzleDBType = ReturnType<typeof drizzle<typeof schema>>;
 // Use React's cache to scope the database client connection to the current request lifecycle.
 // This prevents reusing stale/closed TCP connections across requests in frozen Cloudflare Workers isolates.
 export const getDB = cache((): DrizzleDBType => {
-  let connectionString = process.env.DATABASE_URL || "postgresql://postgres.qksigxubxkecqffdcgcu:Icenit2026!@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
+  let connectionString = process.env.DATABASE_URL || "postgresql://postgres:Icenit2026!@db.qksigxubxkecqffdcgcu.supabase.co:5432/postgres";
   // Ensure sslmode=require is appended for Cloudflare Workers compatibility
   if (!connectionString.includes("sslmode=")) {
     connectionString += connectionString.includes("?") ? "&sslmode=require" : "?sslmode=require";
