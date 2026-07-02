@@ -106,29 +106,9 @@ export async function GET() {
     const result = await db.select().from(contactSubmissions).limit(1);
     return NextResponse.json({ success: true, count: result.length, durationMs: Date.now() - start });
   } catch (error: any) {
-    // Extract host and port from process.env.DATABASE_URL to see if it is overriding
-    let activeDbUrl = process.env.DATABASE_URL || "default_not_set";
-    let redactedUrl = "not_set";
-    let passwordDiagnostics = "not_set";
-    if (activeDbUrl !== "default_not_set") {
-      try {
-        const urlObj = new URL(activeDbUrl.replace("postgresql://", "http://"));
-        redactedUrl = `${urlObj.username.split(".")[0]}@${urlObj.hostname}:${urlObj.port}`;
-        
-        const pwd = urlObj.password;
-        const isIcenitPwd = pwd === "Icenit2026!";
-        const isSu0Pwd = pwd === "su0JgthMHXm1lHyL";
-        passwordDiagnostics = `len: ${pwd.length}, isIcenit: ${isIcenitPwd}, isSu0: ${isSu0Pwd}, start: ${pwd.substring(0, 3)}...${pwd.substring(pwd.length - 3)}`;
-      } catch (e) {
-        redactedUrl = "parse_failed";
-        passwordDiagnostics = "parse_failed";
-      }
-    }
     return NextResponse.json({
       success: false,
       message: error.message,
-      activeDatabaseEnv: redactedUrl,
-      passwordDiagnostics,
       stack: error.stack,
       rawError: String(error),
       keys: Object.getOwnPropertyNames(error),
