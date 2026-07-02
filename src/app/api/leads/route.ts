@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { db, contactSubmissions, demoRequests, jobApplications, getRedactedConnectionString } from "@/db/client";
-import net from "net";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -103,65 +102,51 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
-    // Test raw TCP connection first
-    const tcpPromise = new Promise<{ success: boolean; error?: string }>((resolve) => {
-      try {
-        const socket = net.connect({
-          host: "aws-1-us-east-2.pooler.supabase.com",
-          port: 6543,
-          timeout: 2000
-        });
-        socket.on("connect", () => {
-          socket.end();
-          resolve({ success: true });
-        });
-        socket.on("error", (err) => {
-          resolve({ success: false, error: err.message });
-        });
-        socket.on("timeout", () => {
-          socket.destroy();
-          resolve({ success: false, error: "timeout" });
-        });
-      } catch (e: any) {
-        resolve({ success: false, error: `constructor_failed: ${e.message}` });
-      }
-    });
+    // Dynamically import cloudflare:sockets to avoid local Node build errors
+    // @ts-ignore
+    const { connect } = await import("cloudflare:sockets");
     
-    const tcpResult = await tcpPromise;
-    if (!tcpResult.success) {
-      return NextResponse.json({
-        success: false,
-        message: "TCP connection to pooler failed",
-        tcpError: tcpResult.error,
-        activeDatabaseEnv: getRedactedConnectionString()
-      }, { status: 500 });
+    const start = Date.now();
+    let socket;
+    try {
+      socket = connect({ hostname: "aws-1-us-east-2.pooler.supabase.com", port: 6543 });
+    } catch (e: any) {
+      return NextResponse.json({ success: false, phase: "constructor", error: e.message });
     }
 
-    const start = Date.now();
-    const result = await db.select().from(contactSubmissions).limit(1);
-    return NextResponse.json({ success: true, count: result.length, durationMs: Date.now() - start });
-  } catch (error: any) {
-    let redactedUrl = "not_set";
-    try {
-      const connStr = getRedactedConnectionString();
-      const urlObj = new URL(connStr.replace("postgresql://", "http://"));
-      const pwd = urlObj.password;
-      redactedUrl = `user: ${urlObj.username}, host: ${urlObj.hostname}:${urlObj.port}, pwd_len: ${pwd.length}, pwd_start: ${pwd.substring(0, 3)}...${pwd.substring(pwd.length - 3)}, search: ${urlObj.search}`;
-    } catch (e) {
-      redactedUrl = "parse_failed";
+    const tcpResult = await Promise.race([
+      new Promise<{ success: boolean; error?: string }>(async (resolve) => {
+        try {
+          const reader = socket.readable.getReader();
+          // We just want to see if the socket is open
+          resolve({ success: true });
+        } catch (err: any) {
+          resolve({ success: false, error: err.message });
+        }
+      }),
+      new Promise<{ success: boolean; error?: string }>((_, reject) => {
+        setTimeout(() => reject(new Error("Timeout")), 2000);
+      })
+    ]).catch(err => ({ success: false, error: err.message }));
+
+    if (socket) {
+      try {
+        await socket.close();
+      } catch (e) {}
     }
+
+    return NextResponse.json({
+      success: tcpResult.success,
+      phase: "connect",
+      tcpError: tcpResult.error,
+      durationMs: Date.now() - start
+    });
+  } catch (error: any) {
     return NextResponse.json({
       success: false,
       message: error.message,
-      activeDatabaseEnv: redactedUrl,
       stack: error.stack,
-      rawError: String(error),
-      keys: Object.getOwnPropertyNames(error),
-      cause: error.cause ? {
-        message: error.cause.message,
-        stack: error.cause.stack,
-        raw: String(error.cause)
-      } : null
+      rawError: String(error)
     }, { status: 500 });
   }
 }
