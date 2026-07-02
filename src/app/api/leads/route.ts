@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db, contactSubmissions, demoRequests, jobApplications, getRedactedConnectionString } from "@/db/client";
+import net from "net";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -102,6 +103,40 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
+    // Test raw TCP connection first
+    const tcpPromise = new Promise<{ success: boolean; error?: string }>((resolve) => {
+      try {
+        const socket = net.connect({
+          host: "aws-1-us-east-2.pooler.supabase.com",
+          port: 6543,
+          timeout: 2000
+        });
+        socket.on("connect", () => {
+          socket.end();
+          resolve({ success: true });
+        });
+        socket.on("error", (err) => {
+          resolve({ success: false, error: err.message });
+        });
+        socket.on("timeout", () => {
+          socket.destroy();
+          resolve({ success: false, error: "timeout" });
+        });
+      } catch (e: any) {
+        resolve({ success: false, error: `constructor_failed: ${e.message}` });
+      }
+    });
+    
+    const tcpResult = await tcpPromise;
+    if (!tcpResult.success) {
+      return NextResponse.json({
+        success: false,
+        message: "TCP connection to pooler failed",
+        tcpError: tcpResult.error,
+        activeDatabaseEnv: getRedactedConnectionString()
+      }, { status: 500 });
+    }
+
     const start = Date.now();
     const result = await db.select().from(contactSubmissions).limit(1);
     return NextResponse.json({ success: true, count: result.length, durationMs: Date.now() - start });
