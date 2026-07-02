@@ -30,7 +30,8 @@ export const getDB = cache((): DrizzleDBType => {
     prepare: false,
     max: 1,
     idle_timeout: 1,
-    ssl: "require"
+    connect_timeout: 5,
+    ssl: { rejectUnauthorized: false }
   });
   return drizzle(client, { schema });
 });
