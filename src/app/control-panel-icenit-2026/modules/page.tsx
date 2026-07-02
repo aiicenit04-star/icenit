@@ -2,6 +2,7 @@ import { db, modules, moduleFeatures } from "@/db/client";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
 import ModuleEditor from "./module-editor";
+import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -13,6 +14,13 @@ interface ModulesAdminPageProps {
 }
 
 export default async function ModulesAdminPage({ searchParams }: ModulesAdminPageProps) {
+  const cookieStore = await cookies();
+  const session = cookieStore.get("admin_session")?.value;
+
+  if (session !== "authenticated") {
+    return <div style={{ padding: "2rem", color: "#9ca3af" }}>Cargando panel...</div>;
+  }
+
   const allModules = await db.select().from(modules);
   const resolvedParams = await searchParams;
   const selectedSlug = resolvedParams.selected || allModules[0]?.id;

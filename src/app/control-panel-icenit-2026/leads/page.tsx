@@ -1,10 +1,18 @@
 import { db, contactSubmissions, demoRequests, jobApplications } from "@/db/client";
 import { desc } from "drizzle-orm";
+import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
 
 export default async function AdminLeads() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get("admin_session")?.value;
+
+  if (session !== "authenticated") {
+    return <div style={{ padding: "2rem", color: "#9ca3af" }}>Cargando panel...</div>;
+  }
+
   const contacts = await db
     .select()
     .from(contactSubmissions)

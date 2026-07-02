@@ -1,6 +1,7 @@
 import { db, useCases } from "@/db/client";
 import Link from "next/link";
 import UseCaseEditor from "./use-case-editor";
+import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -12,6 +13,13 @@ interface UseCasesAdminPageProps {
 }
 
 export default async function UseCasesAdminPage({ searchParams }: UseCasesAdminPageProps) {
+  const cookieStore = await cookies();
+  const session = cookieStore.get("admin_session")?.value;
+
+  if (session !== "authenticated") {
+    return <div style={{ padding: "2rem", color: "#9ca3af" }}>Cargando panel...</div>;
+  }
+
   const allUseCases = await db.select().from(useCases);
   const resolvedParams = await searchParams;
   const selectedSlug = resolvedParams.selected || allUseCases[0]?.id;

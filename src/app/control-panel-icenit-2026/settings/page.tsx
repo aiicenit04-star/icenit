@@ -1,11 +1,19 @@
 import { db, siteSettings } from "@/db/client";
 import { eq } from "drizzle-orm";
 import SettingsEditor from "./settings-editor";
+import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
 
 export default async function SettingsAdminPage() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get("admin_session")?.value;
+
+  if (session !== "authenticated") {
+    return <div style={{ padding: "2rem", color: "#9ca3af" }}>Cargando panel...</div>;
+  }
+
   // Fetch site settings (assumes ID 1 exists)
   const [settings] = await db
     .select()
