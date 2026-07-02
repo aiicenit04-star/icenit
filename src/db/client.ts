@@ -8,7 +8,11 @@ let _db: DrizzleDBType | null = null;
 
 function getDB(): DrizzleDBType {
   if (!_db) {
-    const connectionString = process.env.DATABASE_URL || "postgresql://postgres.qksigxubxkecqffdcgcu:Icenit2026!@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
+    let connectionString = process.env.DATABASE_URL || "postgresql://postgres.qksigxubxkecqffdcgcu:Icenit2026!@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
+    // Ensure sslmode=require is appended for Cloudflare Workers compatibility
+    if (!connectionString.includes("sslmode=")) {
+      connectionString += connectionString.includes("?") ? "&sslmode=require" : "?sslmode=require";
+    }
     // Initialize postgres client inside the function to defer socket connection
     const client = postgres(connectionString, { prepare: false });
     _db = drizzle(client, { schema });
