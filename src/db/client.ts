@@ -8,7 +8,7 @@ type DrizzleDBType = ReturnType<typeof drizzle<typeof schema>>;
 
 // Use React's cache to scope the database client connection to the current request lifecycle.
 // This prevents reusing stale/closed TCP connections across requests in frozen Cloudflare Workers isolates.
-export const getDB = cache((): DrizzleDBType => {
+export function getRedactedConnectionString() {
   let connectionString = process.env.DATABASE_URL || "postgresql://postgres.qksigxubxkecqffdcgcu:Icenit2026!@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
   
   // Auto-correct the database username to include the project tenant identifier if connecting to the Supabase pooler
@@ -20,6 +20,11 @@ export const getDB = cache((): DrizzleDBType => {
   if (!connectionString.includes("sslmode=")) {
     connectionString += connectionString.includes("?") ? "&sslmode=require" : "?sslmode=require";
   }
+  return connectionString;
+}
+
+export const getDB = cache((): DrizzleDBType => {
+  const connectionString = getRedactedConnectionString();
   // Initialize postgres client inside the function to defer socket connection
   const client = postgres(connectionString, {
     prepare: false,

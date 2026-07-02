@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db, contactSubmissions, demoRequests, jobApplications } from "@/db/client";
+import { db, contactSubmissions, demoRequests, jobApplications, getRedactedConnectionString } from "@/db/client";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -106,9 +106,19 @@ export async function GET() {
     const result = await db.select().from(contactSubmissions).limit(1);
     return NextResponse.json({ success: true, count: result.length, durationMs: Date.now() - start });
   } catch (error: any) {
+    let redactedUrl = "not_set";
+    try {
+      const connStr = getRedactedConnectionString();
+      const urlObj = new URL(connStr.replace("postgresql://", "http://"));
+      const pwd = urlObj.password;
+      redactedUrl = `user: ${urlObj.username}, host: ${urlObj.hostname}:${urlObj.port}, pwd_len: ${pwd.length}, pwd_start: ${pwd.substring(0, 3)}...${pwd.substring(pwd.length - 3)}, search: ${urlObj.search}`;
+    } catch (e) {
+      redactedUrl = "parse_failed";
+    }
     return NextResponse.json({
       success: false,
       message: error.message,
+      activeDatabaseEnv: redactedUrl,
       stack: error.stack,
       rawError: String(error),
       keys: Object.getOwnPropertyNames(error),
