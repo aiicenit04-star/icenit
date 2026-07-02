@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db, contactSubmissions, demoRequests, jobApplications, getRedactedConnectionString } from "@/db/client";
+import postgres from "postgres";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -102,43 +103,37 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
-    // Dynamically import cloudflare:sockets to avoid local Node build errors
-    // @ts-ignore
-    const { connect } = await import("cloudflare:sockets");
-    
     const start = Date.now();
-    let socket;
+    const connectionString = getRedactedConnectionString();
+    
+    // Create a temporary client with no retries/short timeouts
+    const sql = postgres(connectionString, {
+      prepare: false,
+      max: 1,
+      idle_timeout: 1,
+      connect_timeout: 3
+    });
+
+    let queryResult;
     try {
-      socket = connect({ hostname: "aws-1-us-east-2.pooler.supabase.com", port: 6543 });
-    } catch (e: any) {
-      return NextResponse.json({ success: false, phase: "constructor", error: e.message });
+      queryResult = await sql`SELECT 1 as test`;
+    } catch (queryErr: any) {
+      await sql.end();
+      return NextResponse.json({
+        success: false,
+        phase: "query",
+        error: queryErr.message,
+        stack: queryErr.stack,
+        activeDatabaseEnv: connectionString
+      }, { status: 500 });
     }
 
-    const tcpResult = await Promise.race([
-      new Promise<{ success: boolean; error?: string }>(async (resolve) => {
-        try {
-          const reader = socket.readable.getReader();
-          // We just want to see if the socket is open
-          resolve({ success: true });
-        } catch (err: any) {
-          resolve({ success: false, error: err.message });
-        }
-      }),
-      new Promise<{ success: boolean; error?: string }>((_, reject) => {
-        setTimeout(() => reject(new Error("Timeout")), 2000);
-      })
-    ]).catch(err => ({ success: false, error: err.message }));
-
-    if (socket) {
-      try {
-        await socket.close();
-      } catch (e) {}
-    }
+    await sql.end();
 
     return NextResponse.json({
-      success: tcpResult.success,
-      phase: "connect",
-      tcpError: tcpResult.error,
+      success: true,
+      phase: "query",
+      result: queryResult,
       durationMs: Date.now() - start
     });
   } catch (error: any) {
