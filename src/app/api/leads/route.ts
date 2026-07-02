@@ -99,3 +99,24 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    const start = Date.now();
+    const result = await db.select().from(contactSubmissions).limit(1);
+    return NextResponse.json({ success: true, count: result.length, durationMs: Date.now() - start });
+  } catch (error: any) {
+    return NextResponse.json({
+      success: false,
+      message: error.message,
+      stack: error.stack,
+      rawError: String(error),
+      keys: Object.getOwnPropertyNames(error),
+      cause: error.cause ? {
+        message: error.cause.message,
+        stack: error.cause.stack,
+        raw: String(error.cause)
+      } : null
+    }, { status: 500 });
+  }
+}

@@ -2,26 +2,28 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
 
+import { cache } from "react";
+
 type DrizzleDBType = ReturnType<typeof drizzle<typeof schema>>;
 
-let _db: DrizzleDBType | null = null;
-
-function getDB(): DrizzleDBType {
-  if (!_db) {
-    let connectionString = process.env.DATABASE_URL || "postgresql://postgres.qksigxubxkecqffdcgcu:Icenit2026!@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
-    // Ensure sslmode=require is appended for Cloudflare Workers compatibility
-    if (!connectionString.includes("sslmode=")) {
-      connectionString += connectionString.includes("?") ? "&sslmode=require" : "?sslmode=require";
-    }
-    // Initialize postgres client inside the function to defer socket connection
-    const client = postgres(connectionString, { prepare: false });
-    _db = drizzle(client, { schema });
+// Use React's cache to scope the database client connection to the current request lifecycle.
+// This prevents reusing stale/closed TCP connections across requests in frozen Cloudflare Workers isolates.
+export const getDB = cache((): DrizzleDBType => {
+  let connectionString = process.env.DATABASE_URL || "postgresql://postgres.qksigxubxkecqffdcgcu:Icenit2026!@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
+  // Ensure sslmode=require is appended for Cloudflare Workers compatibility
+  if (!connectionString.includes("sslmode=")) {
+    connectionString += connectionString.includes("?") ? "&sslmode=require" : "?sslmode=require";
   }
-  return _db;
-}
+  // Initialize postgres client inside the function to defer socket connection
+  const client = postgres(connectionString, {
+    prepare: false,
+    max: 1,
+    idle_timeout: 1
+  });
+  return drizzle(client, { schema });
+});
 
-// Export a Proxy that forwards all operations to the lazy-loaded db instance.
-// This prevents module-level initialization errors in Cloudflare Workers.
+// Export a Proxy that forwards all operations to the request-scoped db instance.
 export const db = new Proxy({} as any, {
   get(target, prop, receiver) {
     const actualDb = getDB();

@@ -13,19 +13,35 @@ export default async function AdminDashboard() {
     return <div style={{ padding: "2rem", color: "#9ca3af" }}>Cargando panel...</div>;
   }
 
-  const [contactsCountResult] = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(contactSubmissions);
-  const [demosCountResult] = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(demoRequests);
-  const [applicationsCountResult] = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(jobApplications);
+  let contactsCount = 0;
+  let demosCount = 0;
+  let applicationsCount = 0;
 
-  const contactsCount = contactsCountResult?.count || 0;
-  const demosCount = demosCountResult?.count || 0;
-  const applicationsCount = applicationsCountResult?.count || 0;
+  try {
+    const [contactsCountResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(contactSubmissions);
+    const [demosCountResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(demoRequests);
+    const [applicationsCountResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(jobApplications);
+
+    contactsCount = contactsCountResult?.count || 0;
+    demosCount = demosCountResult?.count || 0;
+    applicationsCount = applicationsCountResult?.count || 0;
+  } catch (error: any) {
+    return (
+      <div style={{ padding: "3rem", color: "#ef4444", backgroundColor: "#111827", border: "1px solid #374151", borderRadius: "8px", margin: "2rem", fontFamily: "monospace" }}>
+        <h3 style={{ fontSize: "1.25rem", marginBottom: "0.5rem", color: "#f87171" }}>Error de Conexión a la Base de Datos</h3>
+        <p style={{ marginBottom: "1rem" }}>{error.message || String(error)}</p>
+        <pre style={{ whiteSpace: "pre-wrap", fontSize: "0.85rem", color: "#9ca3af", background: "#1f2937", padding: "1rem", borderRadius: "4px" }}>
+          {error.stack || "Sin stack trace disponible"}
+        </pre>
+      </div>
+    );
+  }
 
   return (
     <div>

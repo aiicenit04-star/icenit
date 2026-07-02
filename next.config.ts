@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  serverExternalPackages: ["cloudflare:sockets"],
+  turbopack: {
+    resolveAlias: {
+      postgres: "./src/db/postgres-edge-wrapper.js",
+    },
+  },
 };
 
 export default nextConfig;
