@@ -29,7 +29,8 @@ export const getDB = cache((): DrizzleDBType => {
   const client = postgres(connectionString, {
     prepare: false,
     max: 1,
-    idle_timeout: 1
+    idle_timeout: 1,
+    ssl: "require"
   });
   return drizzle(client, { schema });
 });

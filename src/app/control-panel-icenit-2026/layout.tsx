@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import "./admin.css";
 import Link from "next/link";
 import LoginForm from "./login-form";
-import { logout } from "./actions";
+import { logout } from "./auth-actions";
 
 export default async function AdminLayout({
   children,
