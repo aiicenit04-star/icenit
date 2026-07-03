@@ -4,7 +4,6 @@ import Link from "next/link";
 import "../../public.css";
 
 export const dynamic = 'force-dynamic';
-export const runtime = 'edge';
 
 const SUPA_URL = 'https://qksigxubxkecqffdcgcu.supabase.co';
 const SUPA_KEY = 'sb_publishable_0hf41d14bVkcmpI8brc5og_jCWm-d5Z';

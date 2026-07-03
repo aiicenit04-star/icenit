@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { supaInsert, supaSelect } from "@/lib/supabase-admin";
 
 export const dynamic = "force-dynamic";
-export const runtime = "edge";
 
 export async function POST(req: Request) {
   try {

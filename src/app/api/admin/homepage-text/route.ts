@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { supaSelect, supaUpdate } from "@/lib/supabase-admin";
 
-export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 async function checkAuth() {
