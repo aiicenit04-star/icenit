@@ -6,9 +6,14 @@ import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import "../../public.css";
 
-export const dynamic = "force-dynamic";
-export const runtime = "edge";
-
+export async function generateStaticParams() {
+  try {
+    const cases = await db.select({ id: useCases.id }).from(useCases);
+    return cases.map((c) => ({ slug: c.id }));
+  } catch {
+    return [];
+  }
+}
 
 
 interface UseCasePageProps {
