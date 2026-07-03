@@ -2,19 +2,18 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
 
-import { cache } from "react";
-
 type DrizzleDBType = ReturnType<typeof drizzle<typeof schema>>;
 
-// Use React's cache to scope the database client connection to the current request lifecycle.
-// This prevents reusing stale/closed TCP connections across requests in frozen Cloudflare Workers isolates.
 export function getRedactedConnectionString() {
   let connectionString = process.env.DATABASE_URL || "postgresql://postgres.qksigxubxkecqffdcgcu:Icenit2026!@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
   
-  // Under Cloudflare Workers (production), rewrite the pooler connection string to use the direct host/port 5432
-  // Cloudflare Workers natively supports IPv6 direct connection, which avoids all pooler limits and TLS renegotiation bugs
-  const isCloudflareProduction = typeof process !== "undefined" && process.env.NEXT_RUNTIME === "edge";
+  // Detect if we are running in Cloudflare Workers (production) or local Node.js
+  const isNodeJS = typeof navigator === "undefined" || navigator.userAgent !== "Cloudflare-Workers";
+  const isCloudflareProduction = !isNodeJS;
+  
   if (isCloudflareProduction) {
+    // Under Cloudflare Workers (production), rewrite the pooler connection string to use the direct host/port 5432
+    // Cloudflare Workers natively supports IPv6 direct connection, which avoids all pooler limits and TLS renegotiation bugs
     if (connectionString.includes("pooler.supabase.com:6543")) {
       connectionString = connectionString
         .replace("aws-1-us-east-2.pooler.supabase.com:6543", "db.qksigxubxkecqffdcgcu.supabase.co:5432")
@@ -42,7 +41,7 @@ export function getDB(): DrizzleDBType {
     const client = postgres(connectionString, {
       prepare: false,
       max: 1,
-      idle_timeout: 15, // Keep connection alive for 15s of inactivity
+      idle_timeout: 10,
       connect_timeout: 5,
       ssl: { rejectUnauthorized: false }
     });
@@ -51,7 +50,8 @@ export function getDB(): DrizzleDBType {
   return globalDb;
 }
 
-// Export a Proxy that forwards all operations to the cached db instance.
+// Export a Proxy to lazy-load the database client connection.
+// This prevents Next.js edge runtime build compilation errors (e.g. node:stream missing) during static page generation.
 export const db = new Proxy({} as any, {
   get(target, prop, receiver) {
     const actualDb = getDB();
