@@ -32,10 +32,10 @@ export function getDB(): DrizzleDBType {
     // We connect to the pooler (port 6543) which uses Supavisor warm connections for high speed.
     const client = postgres(connectionString, {
       prepare: false,
-      max: 1,
-      idle_timeout: 0.2, // Close connection after 200ms of inactivity
+      max: 5,
+      idle_timeout: 2, // Close connection after 2 seconds of inactivity
       connect_timeout: 5,
-      ssl: { rejectUnauthorized: false }
+      ssl: "require"
     });
     globalDb = drizzle(client, { schema });
   }
