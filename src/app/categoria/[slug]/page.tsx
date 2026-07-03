@@ -6,14 +6,8 @@ import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import "../../public.css";
 
-export async function generateStaticParams() {
-  return [
-    { slug: "findings" },
-    { slug: "advanced-analytics" },
-    { slug: "process-digitization" },
-    { slug: "management-support" }
-  ];
-}
+export const dynamic = "force-dynamic";
+
 
 interface CategoryPageProps {
   params: Promise<{

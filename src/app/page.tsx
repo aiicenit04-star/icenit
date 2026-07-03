@@ -4,7 +4,7 @@ import Link from "next/link";
 import { db, modules, useCases } from "@/db/client";
 import "./public.css";
 
-
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const allModules = await db.select().from(modules);

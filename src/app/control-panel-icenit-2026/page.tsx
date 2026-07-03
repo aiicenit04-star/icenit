@@ -1,91 +1,42 @@
-import { db, contactSubmissions, demoRequests, jobApplications, getRedactedConnectionString } from "@/db/client";
-import { sql } from "drizzle-orm";
-import { cookies } from "next/headers";
-import { Suspense } from "react";
+"use client";
 
-export const dynamic = "force-dynamic";
-export const runtime = "edge";
+import { useEffect, useState } from "react";
 
-async function MetricCards() {
-  let contactsCount = 0;
-  let demosCount = 0;
-  let applicationsCount = 0;
+interface Metrics {
+  contacts: number;
+  demos: number;
+  applications: number;
+}
 
-  try {
-    // Run the count queries in parallel to speed up database fetching
-    const [contactsCountResult, demosCountResult, applicationsCountResult] = await Promise.all([
-      db.select({ count: sql<number>`count(*)` }).from(contactSubmissions).then(res => res[0]),
-      db.select({ count: sql<number>`count(*)` }).from(demoRequests).then(res => res[0]),
-      db.select({ count: sql<number>`count(*)` }).from(jobApplications).then(res => res[0])
-    ]);
-
-    contactsCount = contactsCountResult?.count || 0;
-    demosCount = demosCountResult?.count || 0;
-    applicationsCount = applicationsCountResult?.count || 0;
-  } catch (error: any) {
-    const connectionString = getRedactedConnectionString();
-    const redactedUrl = connectionString.replace(/:[^:@]+@/, ":****@");
-    const hasEnvUrl = typeof process !== "undefined" && !!process.env.DATABASE_URL;
-    const isPasswordMatching = connectionString.includes(":Icenit2026!@");
-    
-    return (
-      <div style={{ gridColumn: "1 / -1", padding: "2rem", color: "#ef4444", backgroundColor: "#111827", border: "1px solid #374151", borderRadius: "8px", fontFamily: "monospace" }}>
-        <h3 style={{ fontSize: "1.1rem", marginBottom: "0.5rem", color: "#f87171" }}>Error al cargar métricas de Base de Datos</h3>
-        <p style={{ marginBottom: "0.5rem", fontWeight: "bold" }}>{error.message || String(error)}</p>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem", margin: "1rem 0", fontSize: "0.85rem", color: "#e5e7eb" }}>
-          <div><strong>Causa:</strong> {error.cause ? (error.cause.message || JSON.stringify(error.cause)) : "N/A"}</div>
-          <div><strong>URL de Conexión (Redactada):</strong> {redactedUrl}</div>
-          <div><strong>¿Usa Variable de Entorno en Cloudflare?:</strong> {hasEnvUrl ? "SÍ" : "NO (usa fallback hardcodeado)"}</div>
-          <div><strong>¿Contraseña coincide con local (Icenit2026!):</strong> {isPasswordMatching ? "SÍ" : "NO (¡la contraseña configurada en tu panel de Cloudflare es diferente!)"}</div>
-        </div>
-      </div>
-    );
-  }
-
+function MetricCard({ label, value, loading }: { label: string; value: number; loading: boolean }) {
   return (
-    <>
-      <div className="metric-card">
-        <span className="metric-label">Demos Solicitadas</span>
-        <span className="metric-value">{demosCount}</span>
-      </div>
-      <div className="metric-card">
-        <span className="metric-label">Mensajes de Contacto</span>
-        <span className="metric-value">{contactsCount}</span>
-      </div>
-      <div className="metric-card">
-        <span className="metric-label">Postulaciones (Carreras)</span>
-        <span className="metric-value">{applicationsCount}</span>
-      </div>
-    </>
+    <div className="metric-card">
+      <span className="metric-label">{label}</span>
+      <span className="metric-value">{loading ? "..." : value}</span>
+    </div>
   );
 }
 
-function MetricCardsFallback() {
-  return (
-    <>
-      <div className="metric-card" style={{ opacity: 0.6 }}>
-        <span className="metric-label">Demos Solicitadas</span>
-        <span className="metric-value">...</span>
-      </div>
-      <div className="metric-card" style={{ opacity: 0.6 }}>
-        <span className="metric-label">Mensajes de Contacto</span>
-        <span className="metric-value">...</span>
-      </div>
-      <div className="metric-card" style={{ opacity: 0.6 }}>
-        <span className="metric-label">Postulaciones (Carreras)</span>
-        <span className="metric-value">...</span>
-      </div>
-    </>
-  );
-}
+export default function AdminDashboard() {
+  const [metrics, setMetrics] = useState<Metrics | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export default async function AdminDashboard() {
-  const cookieStore = await cookies();
-  const session = cookieStore.get("admin_session")?.value;
-
-  if (session !== "authenticated") {
-    return <div style={{ padding: "2rem", color: "#9ca3af" }}>Cargando panel...</div>;
-  }
+  useEffect(() => {
+    fetch("/api/admin/metrics")
+      .then((res) => {
+        if (!res.ok) throw new Error(`Error ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        setMetrics(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <div>
@@ -93,10 +44,27 @@ export default async function AdminDashboard() {
         <h1 className="admin-title">Resumen</h1>
       </header>
 
+      {error && (
+        <div
+          style={{
+            padding: "1.25rem 1.5rem",
+            background: "rgba(239,68,68,0.08)",
+            border: "1px solid rgba(239,68,68,0.2)",
+            borderRadius: "10px",
+            color: "#f87171",
+            marginBottom: "2rem",
+            fontFamily: "monospace",
+            fontSize: "0.9rem",
+          }}
+        >
+          ⚠️ Error al cargar métricas: {error}
+        </div>
+      )}
+
       <div className="admin-grid">
-        <Suspense fallback={<MetricCardsFallback />}>
-          <MetricCards />
-        </Suspense>
+        <MetricCard label="Demos Solicitadas" value={metrics?.demos ?? 0} loading={loading} />
+        <MetricCard label="Mensajes de Contacto" value={metrics?.contacts ?? 0} loading={loading} />
+        <MetricCard label="Postulaciones (Carreras)" value={metrics?.applications ?? 0} loading={loading} />
       </div>
 
       <div className="admin-card">
@@ -104,7 +72,9 @@ export default async function AdminDashboard() {
           Panel de Administración de iCenit.ai
         </h2>
         <p style={{ color: "#9ca3af", lineHeight: "1.6" }}>
-          Utiliza este panel para revisar los contactos comerciales y solicitudes de demostración recibidos a través de los formularios del sitio web. Toda la información registrada se almacena localmente y de forma segura.
+          Utiliza este panel para revisar los contactos comerciales y solicitudes de demostración
+          recibidos a través de los formularios del sitio web. Toda la información registrada se
+          almacena localmente y de forma segura.
         </p>
       </div>
     </div>
