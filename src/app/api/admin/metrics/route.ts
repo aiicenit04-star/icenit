@@ -28,7 +28,15 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     console.error("Error fetching metrics:", error);
     return NextResponse.json(
-      { error: error.message || "Error al obtener métricas" },
+      {
+        error: error.message,
+        pg_code: error?.code,
+        pg_detail: error?.detail,
+        pg_severity: error?.severity,
+        pg_hint: error?.hint,
+        cause: error?.cause ? String(error.cause) : undefined,
+        type: error?.constructor?.name,
+      },
       { status: 500 }
     );
   }
