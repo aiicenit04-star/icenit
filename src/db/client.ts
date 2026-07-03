@@ -23,20 +23,24 @@ export function getRedactedConnectionString() {
   return connectionString;
 }
 
-export const getDB = cache((): DrizzleDBType => {
-  const connectionString = getRedactedConnectionString();
-  // Initialize postgres client inside the function to defer socket connection
-  const client = postgres(connectionString, {
-    prepare: false,
-    max: 1,
-    idle_timeout: 1,
-    connect_timeout: 5,
-    ssl: { rejectUnauthorized: false }
-  });
-  return drizzle(client, { schema });
-});
+let globalDb: DrizzleDBType | null = null;
 
-// Export a Proxy that forwards all operations to the request-scoped db instance.
+export function getDB(): DrizzleDBType {
+  if (!globalDb) {
+    const connectionString = getRedactedConnectionString();
+    const client = postgres(connectionString, {
+      prepare: false,
+      max: 1,
+      idle_timeout: 15, // Keep connection alive for 15s of inactivity
+      connect_timeout: 5,
+      ssl: { rejectUnauthorized: false }
+    });
+    globalDb = drizzle(client, { schema });
+  }
+  return globalDb;
+}
+
+// Export a Proxy that forwards all operations to the cached db instance.
 export const db = new Proxy({} as any, {
   get(target, prop, receiver) {
     const actualDb = getDB();
