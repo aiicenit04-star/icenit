@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { getSupabaseAdmin } from "@/lib/supabase-admin";
+import { supaSelect, supaUpdate, supaDelete, supaInsert } from "@/lib/supabase-admin";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -15,28 +15,24 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const supabase = getSupabaseAdmin();
+  try {
+    const { data: modulesList, error: e1 } = await supaSelect("modules", { order: "id.asc" });
+    if (e1) return NextResponse.json({ error: e1 }, { status: 500 });
 
-  const { data: modulesList, error: e1 } = await supabase
-    .from("modules")
-    .select("*")
-    .order("id", { ascending: true });
+    const { data: features, error: e2 } = await supaSelect("module_features", { order: "id.asc" });
+    if (e2) return NextResponse.json({ error: e2 }, { status: 500 });
 
-  if (e1) return NextResponse.json({ error: e1.message }, { status: 500 });
+    const modulesWithFeatures = (modulesList ?? []).map((mod: any) => ({
+      ...mod,
+      features: (features ?? [])
+        .filter((f: any) => f.module_id === mod.id)
+        .map((f: any) => f.feature),
+    }));
 
-  const { data: features, error: e2 } = await supabase
-    .from("module_features")
-    .select("*")
-    .order("id", { ascending: true });
-
-  if (e2) return NextResponse.json({ error: e2.message }, { status: 500 });
-
-  const modulesWithFeatures = (modulesList ?? []).map((mod) => ({
-    ...mod,
-    features: (features ?? []).filter((f) => f.module_id === mod.id).map((f) => f.feature),
-  }));
-
-  return NextResponse.json(modulesWithFeatures);
+    return NextResponse.json(modulesWithFeatures);
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }
 
 export async function PUT(request: NextRequest) {
@@ -44,28 +40,33 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const supabase = getSupabaseAdmin();
-  const body = await request.json();
-  const { id, title, subtitle, description, meta_description, category, features } = body;
+  try {
+    const body = await request.json();
+    const { id, title, subtitle, description, meta_description, category, features } = body;
 
-  const { error: e1 } = await supabase
-    .from("modules")
-    .update({ title, subtitle, description, meta_description, category })
-    .eq("id", id);
+    const { error: e1 } = await supaUpdate(
+      "modules",
+      { title, subtitle, description, meta_description, category },
+      "id",
+      id
+    );
+    if (e1) return NextResponse.json({ error: e1 }, { status: 500 });
 
-  if (e1) return NextResponse.json({ error: e1.message }, { status: 500 });
+    if (Array.isArray(features)) {
+      const { error: e2 } = await supaDelete("module_features", "module_id", id);
+      if (e2) return NextResponse.json({ error: e2 }, { status: 500 });
 
-  if (Array.isArray(features)) {
-    const { error: e2 } = await supabase.from("module_features").delete().eq("module_id", id);
-    if (e2) return NextResponse.json({ error: e2.message }, { status: 500 });
-
-    if (features.length > 0) {
-      const { error: e3 } = await supabase
-        .from("module_features")
-        .insert(features.map((feature: string) => ({ module_id: id, feature })));
-      if (e3) return NextResponse.json({ error: e3.message }, { status: 500 });
+      if (features.length > 0) {
+        const { error: e3 } = await supaInsert(
+          "module_features",
+          features.map((feature: string) => ({ module_id: id, feature }))
+        );
+        if (e3) return NextResponse.json({ error: e3 }, { status: 500 });
+      }
     }
-  }
 
-  return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }
