@@ -1,9 +1,24 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { db, modules } from "@/db/client";
-import { eq } from "drizzle-orm";
 import "../public.css";
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
+
+const SUPA_URL = 'https://qksigxubxkecqffdcgcu.supabase.co';
+const SUPA_KEY = 'sb_publishable_0hf41d14bVkcmpI8brc5og_jCWm-d5Z';
+
+async function supaFetch(table: string, params: Record<string, string> = {}) {
+  const url = new URL(`${SUPA_URL}/rest/v1/${table}`);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const res = await fetch(url.toString(), {
+    headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json' },
+    cache: 'no-store',
+  });
+  if (!res.ok) return [];
+  return res.json();
+}
 
 
 function getModuleIcon(id: string) {
@@ -105,19 +120,53 @@ function getModuleIcon(id: string) {
   }
 }
 
+interface Module {
+  id: string;
+  title: string;
+  meta_description: string;
+  image_url?: string | null;
+  category: string;
+}
+
 export default async function ModulosPage() {
-  const analitica = await db
-    .select()
-    .from(modules)
-    .where(eq(modules.category, "analitica-avanzada"));
-  const aplicaciones = await db
-    .select()
-    .from(modules)
-    .where(eq(modules.category, "aplicaciones"));
-  const apoyo = await db
-    .select()
-    .from(modules)
-    .where(eq(modules.category, "apoyo-a-la-gestion"));
+  const allModules: Module[] = await supaFetch('modules', {
+    select: 'id,title,meta_description,image_url,category',
+    order: 'title.asc',
+  });
+
+  const analitica = allModules.filter((m) => m.category === 'analitica-avanzada');
+  const aplicaciones = allModules.filter((m) => m.category === 'aplicaciones');
+  const apoyo = allModules.filter((m) => m.category === 'apoyo-a-la-gestion');
+
+  const ModuleCard = ({ m }: { m: Module }) => (
+    <div key={m.id} className="module-card" style={{ padding: 0, overflow: "hidden" }}>
+      <div>
+        <div style={{ background: "rgba(255, 255, 255, 0.02)", height: "160px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.04)", overflow: "hidden", position: "relative" }}>
+          {m.image_url ? (
+            <img src={m.image_url} alt={m.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          ) : (
+            getModuleIcon(m.id)
+          )}
+        </div>
+        <div style={{ padding: "1.75rem 1.75rem 1rem 1.75rem" }}>
+          <h3 className="module-title" style={{ color: "#fff", marginTop: 0, marginBottom: "0.75rem", fontSize: "1.2rem", fontWeight: "700", textAlign: "left" }}>
+            {m.title}
+          </h3>
+          <p className="module-desc" style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.6", textAlign: "left", marginBottom: 0 }}>
+            {m.meta_description}
+          </p>
+        </div>
+      </div>
+      <div style={{ padding: "0 1.75rem 1.75rem 1.75rem" }}>
+        <Link 
+          href={`/modulos/${m.id}`} 
+          style={{ display: "inline-flex", alignItems: "center", color: "var(--accent-blue-light)", fontWeight: "700", textDecoration: "none", fontSize: "0.8rem", letterSpacing: "1px", textTransform: "uppercase" }}
+        >
+          Ver Módulo <span style={{ marginLeft: "0.5rem", fontWeight: "bold", fontSize: "0.95rem" }}>&gt;</span>
+        </Link>
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -146,33 +195,7 @@ export default async function ModulosPage() {
           </div>
           <div className="modules-grid">
             {analitica.map((m) => (
-              <div key={m.id} className="module-card" style={{ padding: 0, overflow: "hidden" }}>
-                <div>
-                  <div style={{ background: "rgba(255, 255, 255, 0.02)", height: "160px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.04)", overflow: "hidden", position: "relative" }}>
-                    {m.imageUrl ? (
-                      <img src={m.imageUrl} alt={m.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    ) : (
-                      getModuleIcon(m.id)
-                    )}
-                  </div>
-                  <div style={{ padding: "1.75rem 1.75rem 1rem 1.75rem" }}>
-                    <h3 className="module-title" style={{ color: "#fff", marginTop: 0, marginBottom: "0.75rem", fontSize: "1.2rem", fontWeight: "700", textAlign: "left" }}>
-                      {m.title}
-                    </h3>
-                    <p className="module-desc" style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.6", textAlign: "left", marginBottom: 0 }}>
-                      {m.metaDescription}
-                    </p>
-                  </div>
-                </div>
-                <div style={{ padding: "0 1.75rem 1.75rem 1.75rem" }}>
-                  <Link 
-                    href={`/modulos/${m.id}`} 
-                    style={{ display: "inline-flex", alignItems: "center", color: "var(--accent-blue-light)", fontWeight: "700", textDecoration: "none", fontSize: "0.8rem", letterSpacing: "1px", textTransform: "uppercase" }}
-                  >
-                    Ver Módulo <span style={{ marginLeft: "0.5rem", fontWeight: "bold", fontSize: "0.95rem" }}>&gt;</span>
-                  </Link>
-                </div>
-              </div>
+              <ModuleCard key={m.id} m={m} />
             ))}
           </div>
         </section>
@@ -189,33 +212,7 @@ export default async function ModulosPage() {
           </div>
           <div className="modules-grid">
             {aplicaciones.map((m) => (
-              <div key={m.id} className="module-card" style={{ padding: 0, overflow: "hidden" }}>
-                <div>
-                  <div style={{ background: "rgba(255, 255, 255, 0.02)", height: "160px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.04)", overflow: "hidden", position: "relative" }}>
-                    {m.imageUrl ? (
-                      <img src={m.imageUrl} alt={m.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    ) : (
-                      getModuleIcon(m.id)
-                    )}
-                  </div>
-                  <div style={{ padding: "1.75rem 1.75rem 1rem 1.75rem" }}>
-                    <h3 className="module-title" style={{ color: "#fff", marginTop: 0, marginBottom: "0.75rem", fontSize: "1.2rem", fontWeight: "700", textAlign: "left" }}>
-                      {m.title}
-                    </h3>
-                    <p className="module-desc" style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.6", textAlign: "left", marginBottom: 0 }}>
-                      {m.metaDescription}
-                    </p>
-                  </div>
-                </div>
-                <div style={{ padding: "0 1.75rem 1.75rem 1.75rem" }}>
-                  <Link 
-                    href={`/modulos/${m.id}`} 
-                    style={{ display: "inline-flex", alignItems: "center", color: "var(--accent-blue-light)", fontWeight: "700", textDecoration: "none", fontSize: "0.8rem", letterSpacing: "1px", textTransform: "uppercase" }}
-                  >
-                    Ver Módulo <span style={{ marginLeft: "0.5rem", fontWeight: "bold", fontSize: "0.95rem" }}>&gt;</span>
-                  </Link>
-                </div>
-              </div>
+              <ModuleCard key={m.id} m={m} />
             ))}
           </div>
         </section>
@@ -232,33 +229,7 @@ export default async function ModulosPage() {
           </div>
           <div className="modules-grid">
             {apoyo.map((m) => (
-              <div key={m.id} className="module-card" style={{ padding: 0, overflow: "hidden" }}>
-                <div>
-                  <div style={{ background: "rgba(255, 255, 255, 0.02)", height: "160px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.04)", overflow: "hidden", position: "relative" }}>
-                    {m.imageUrl ? (
-                      <img src={m.imageUrl} alt={m.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    ) : (
-                      getModuleIcon(m.id)
-                    )}
-                  </div>
-                  <div style={{ padding: "1.75rem 1.75rem 1rem 1.75rem" }}>
-                    <h3 className="module-title" style={{ color: "#fff", marginTop: 0, marginBottom: "0.75rem", fontSize: "1.2rem", fontWeight: "700", textAlign: "left" }}>
-                      {m.title}
-                    </h3>
-                    <p className="module-desc" style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.6", textAlign: "left", marginBottom: 0 }}>
-                      {m.metaDescription}
-                    </p>
-                  </div>
-                </div>
-                <div style={{ padding: "0 1.75rem 1.75rem 1.75rem" }}>
-                  <Link 
-                    href={`/modulos/${m.id}`} 
-                    style={{ display: "inline-flex", alignItems: "center", color: "var(--accent-blue-light)", fontWeight: "700", textDecoration: "none", fontSize: "0.8rem", letterSpacing: "1px", textTransform: "uppercase" }}
-                  >
-                    Ver Módulo <span style={{ marginLeft: "0.5rem", fontWeight: "bold", fontSize: "0.95rem" }}>&gt;</span>
-                  </Link>
-                </div>
-              </div>
+              <ModuleCard key={m.id} m={m} />
             ))}
           </div>
         </section>

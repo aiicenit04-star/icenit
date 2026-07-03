@@ -1,11 +1,36 @@
 "use client";
+export const runtime = "edge";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../public.css";
 
+interface TeamMember { id: string; name: string; role: string; photo_url: string; whatsapp: string; display_order: number; }
+
 export default function ContactoPage() {
+  const [team, setTeam] = useState<TeamMember[]>([]);
+
+  useEffect(() => {
+    fetch('/api/admin/team')
+      .then(r => r.ok ? r.json() : [])
+      .catch(() => [])
+      .then((data) => {
+        // Team API is admin-protected; fall back to defaults if not authenticated
+        if (Array.isArray(data) && data.length > 0) setTeam(data);
+        else setTeam([
+          { id: 'javier-pinto', name: 'JAVIER PINTO JAÉN', role: 'Consultor Senior', photo_url: '/javier_icenit.jpg', whatsapp: '+56982947647', display_order: 1 },
+          { id: 'pablo-herrera', name: 'PABLO HERRERA DIMTER', role: 'Consultor Senior', photo_url: '/pablo_icenit.jpg', whatsapp: '+56991282833', display_order: 2 },
+        ]);
+      });
+  }, []);
+
+  // Use default team data if fetch hasn't resolved yet
+  const displayTeam: TeamMember[] = team.length > 0 ? team : [
+    { id: 'javier-pinto', name: 'JAVIER PINTO JAÉN', role: 'Consultor Senior', photo_url: '/javier_icenit.jpg', whatsapp: '+56982947647', display_order: 1 },
+    { id: 'pablo-herrera', name: 'PABLO HERRERA DIMTER', role: 'Consultor Senior', photo_url: '/pablo_icenit.jpg', whatsapp: '+56991282833', display_order: 2 },
+  ];
+
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -240,144 +265,99 @@ export default function ContactoPage() {
           </div>
         </div>
 
-        {/* Consultants Section */}
-        <div style={{ marginTop: "6rem", display: "flex", flexDirection: "column", gap: "4rem", maxWidth: "1100px", margin: "6rem auto 0" }}>
-          
-          {/* Consultant 1: Javier Pinto */}
-          <div className="consultant-row">
-            {/* Text Card */}
-            <div className="glass-panel" style={{ padding: "3rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <h2 style={{ fontFamily: "var(--font-title)", fontSize: "2rem", fontWeight: "800", color: "#fff", marginBottom: "1rem", textAlign: "left" }}>
-                ¿Cómo puede ayudarte James?
-              </h2>
-              <p style={{ color: "var(--text-secondary)", fontSize: "1rem", fontWeight: "500", marginBottom: "1.5rem", textAlign: "left" }}>
-                Proveemos soluciones concretas a las necesidades de la gerencia del SSO
-              </p>
-              
-              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 1.5rem 0", display: "flex", flexDirection: "column", gap: "1rem" }}>
-                <li style={{ display: "flex", alignItems: "start", gap: "0.75rem", color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.5", textAlign: "left" }}>
-                  <span style={{ color: "var(--accent-blue-light)", fontWeight: "bold", fontSize: "1.1rem" }}>✓</span>
-                  <span>Alinea tu estrategia, riesgos y mide el desempeño.</span>
-                </li>
-                <li style={{ display: "flex", alignItems: "start", gap: "0.75rem", color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.5", textAlign: "left" }}>
-                  <span style={{ color: "var(--accent-blue-light)", fontWeight: "bold", fontSize: "1.1rem" }}>✓</span>
-                  <span>Ayuda a tu organización a mitigar riesgos, reducir incidentes y disminuirlos.</span>
-                </li>
-              </ul>
-
-              <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.7", marginBottom: "1.5rem", textAlign: "left" }}>
-                Con más de 20 años en la consultoría de SSO desarrollando estrategias y políticas, ejecutando investigaciones en un amplio rubro de industrias.
-              </p>
-              
-              <p style={{ color: "var(--accent-blue-light)", fontWeight: "700", fontSize: "0.95rem", margin: 0, textAlign: "left" }}>
-                Conéctate con nuestros consultores especialistas.
-              </p>
-            </div>
-
-            {/* Person Card */}
-            <div className="glass-panel" style={{ padding: "3rem 2rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
-              <div style={{ width: "160px", height: "160px", borderRadius: "50%", overflow: "hidden", marginBottom: "1.5rem", border: "2px solid rgba(255, 65, 0, 0.2)" }}>
-                <img 
-                  src="/javier_icenit.jpg" 
-                  alt="Javier Pinto Jaén" 
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }} 
-                />
+          {/* Consultants Section */}
+          <div style={{ marginTop: "6rem", display: "flex", flexDirection: "column", gap: "4rem", maxWidth: "1100px", margin: "6rem auto 0" }}>
+            
+            {/* Consultant 1 — first team member */}
+            {displayTeam[0] && (
+            <div className="consultant-row">
+              {/* Text Card */}
+              <div className="glass-panel" style={{ padding: "3rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <h2 style={{ fontFamily: "var(--font-title)", fontSize: "2rem", fontWeight: "800", color: "#fff", marginBottom: "1rem", textAlign: "left" }}>
+                  ¿Cómo puede ayudarte James?
+                </h2>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1rem", fontWeight: "500", marginBottom: "1.5rem", textAlign: "left" }}>
+                  Proveemos soluciones concretas a las necesidades de la gerencia del SSO
+                </p>
+                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 1.5rem 0", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                  <li style={{ display: "flex", alignItems: "start", gap: "0.75rem", color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.5", textAlign: "left" }}>
+                    <span style={{ color: "var(--accent-blue-light)", fontWeight: "bold", fontSize: "1.1rem" }}>✓</span>
+                    <span>Alinea tu estrategia, riesgos y mide el desempeño.</span>
+                  </li>
+                  <li style={{ display: "flex", alignItems: "start", gap: "0.75rem", color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.5", textAlign: "left" }}>
+                    <span style={{ color: "var(--accent-blue-light)", fontWeight: "bold", fontSize: "1.1rem" }}>✓</span>
+                    <span>Ayuda a tu organización a mitigar riesgos, reducir incidentes y disminuirlos.</span>
+                  </li>
+                </ul>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.7", marginBottom: "1.5rem", textAlign: "left" }}>
+                  Con más de 20 años en la consultoría de SSO desarrollando estrategias y políticas, ejecutando investigaciones en un amplio rubro de industrias.
+                </p>
+                <p style={{ color: "var(--accent-blue-light)", fontWeight: "700", fontSize: "0.95rem", margin: 0, textAlign: "left" }}>
+                  Conéctate con nuestros consultores especialistas.
+                </p>
               </div>
-              <h3 style={{ fontFamily: "var(--font-title)", fontSize: "1.1rem", fontWeight: "700", color: "#fff", marginBottom: "1.5rem", letterSpacing: "0.5px" }}>
-                JAVIER PINTO JAÉN
-              </h3>
-              <a 
-                href="https://wa.me/56982947647"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary" 
-                style={{ 
-                  padding: "0.75rem 2.5rem", 
-                  borderRadius: "6px", 
-                  fontWeight: "700", 
-                  fontSize: "0.9rem", 
-                  border: "none", 
-                  cursor: "pointer",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.5px",
-                  width: "auto",
-                  textDecoration: "none",
-                  display: "inline-block"
-                }}
-              >
-                Hablemos
-              </a>
-            </div>
-          </div>
-
-          {/* Consultant 2: Pablo Herrera */}
-          <div className="consultant-row" style={{ gridTemplateColumns: "0.9fr 2.1fr" }}>
-            {/* Person Card */}
-            <div className="glass-panel" style={{ padding: "3rem 2rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
-              <div style={{ width: "160px", height: "160px", borderRadius: "50%", overflow: "hidden", marginBottom: "1.5rem", border: "2px solid rgba(255, 65, 0, 0.2)" }}>
-                <img 
-                  src="/pablo_icenit.jpg" 
-                  alt="Pablo Herrera Dimter" 
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }} 
-                />
+              {/* Person Card */}
+              <div className="glass-panel" style={{ padding: "3rem 2rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+                <div style={{ width: "160px", height: "160px", borderRadius: "50%", overflow: "hidden", marginBottom: "1.5rem", border: "2px solid rgba(255, 65, 0, 0.2)" }}>
+                  <img src={displayTeam[0].photo_url} alt={displayTeam[0].name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+                <h3 style={{ fontFamily: "var(--font-title)", fontSize: "1.1rem", fontWeight: "700", color: "#fff", marginBottom: "1.5rem", letterSpacing: "0.5px" }}>
+                  {displayTeam[0].name.toUpperCase()}
+                </h3>
+                <a href={`https://wa.me/${displayTeam[0].whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="btn-primary"
+                  style={{ padding: "0.75rem 2.5rem", borderRadius: "6px", fontWeight: "700", fontSize: "0.9rem", border: "none", cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.5px", textDecoration: "none", display: "inline-block" }}>
+                  Hablemos
+                </a>
               </div>
-              <h3 style={{ fontFamily: "var(--font-title)", fontSize: "1.1rem", fontWeight: "700", color: "#fff", marginBottom: "1.5rem", letterSpacing: "0.5px" }}>
-                PABLO HERRERA DIMTER
-              </h3>
-              <a 
-                href="https://wa.me/56991282833"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary" 
-                style={{ 
-                  padding: "0.75rem 2.5rem", 
-                  borderRadius: "6px", 
-                  fontWeight: "700", 
-                  fontSize: "0.9rem", 
-                  border: "none", 
-                  cursor: "pointer",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.5px",
-                  width: "auto",
-                  textDecoration: "none",
-                  display: "inline-block"
-                }}
-              >
-                Hablemos
-              </a>
             </div>
+            )}
 
-            {/* Text Card */}
-            <div className="glass-panel" style={{ padding: "3rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <h2 style={{ fontFamily: "var(--font-title)", fontSize: "2rem", fontWeight: "800", color: "#fff", marginBottom: "1rem", textAlign: "left" }}>
-                ¿No sabes cómo implementarlo?
-              </h2>
-              <p style={{ color: "var(--text-secondary)", fontSize: "1rem", fontWeight: "500", marginBottom: "1.5rem", textAlign: "left" }}>
-                Desplegamos la solución de manera ágil y rápida:
-              </p>
-              
-              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 1.5rem 0", display: "flex", flexDirection: "column", gap: "1rem" }}>
-                <li style={{ display: "flex", alignItems: "start", gap: "0.75rem", color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.5", textAlign: "left" }}>
-                  <span style={{ color: "var(--accent-blue-light)", fontWeight: "bold", fontSize: "1.1rem" }}>✓</span>
-                  <span>Ofrecemos PoC para validar nuestra solución.</span>
-                </li>
-                <li style={{ display: "flex", alignItems: "start", gap: "0.75rem", color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.5", textAlign: "left" }}>
-                  <span style={{ color: "var(--accent-blue-light)", fontWeight: "bold", fontSize: "1.1rem" }}>✓</span>
-                  <span>Implementamos pilotos de uno o todos los módulos.</span>
-                </li>
-                <li style={{ display: "flex", alignItems: "start", gap: "0.75rem", color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.5", textAlign: "left" }}>
-                  <span style={{ color: "var(--accent-blue-light)", fontWeight: "bold", fontSize: "1.1rem" }}>✓</span>
-                  <span>Desplegamos la solución a toda la organización.</span>
-                </li>
-              </ul>
-              
-              <p style={{ color: "var(--accent-blue-light)", fontWeight: "700", fontSize: "0.95rem", margin: 0, textAlign: "left" }}>
-                Conéctate con nuestros consultores en producto e implementación.
-              </p>
+            {/* Consultant 2 — second team member */}
+            {displayTeam[1] && (
+            <div className="consultant-row" style={{ gridTemplateColumns: "0.9fr 2.1fr" }}>
+              {/* Person Card */}
+              <div className="glass-panel" style={{ padding: "3rem 2rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+                <div style={{ width: "160px", height: "160px", borderRadius: "50%", overflow: "hidden", marginBottom: "1.5rem", border: "2px solid rgba(255, 65, 0, 0.2)" }}>
+                  <img src={displayTeam[1].photo_url} alt={displayTeam[1].name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+                <h3 style={{ fontFamily: "var(--font-title)", fontSize: "1.1rem", fontWeight: "700", color: "#fff", marginBottom: "1.5rem", letterSpacing: "0.5px" }}>
+                  {displayTeam[1].name.toUpperCase()}
+                </h3>
+                <a href={`https://wa.me/${displayTeam[1].whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="btn-primary"
+                  style={{ padding: "0.75rem 2.5rem", borderRadius: "6px", fontWeight: "700", fontSize: "0.9rem", border: "none", cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.5px", textDecoration: "none", display: "inline-block" }}>
+                  Hablemos
+                </a>
+              </div>
+              {/* Text Card */}
+              <div className="glass-panel" style={{ padding: "3rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <h2 style={{ fontFamily: "var(--font-title)", fontSize: "2rem", fontWeight: "800", color: "#fff", marginBottom: "1rem", textAlign: "left" }}>
+                  ¿No sabes cómo implementarlo?
+                </h2>
+                <p style={{ color: "var(--text-secondary)", fontSize: "1rem", fontWeight: "500", marginBottom: "1.5rem", textAlign: "left" }}>
+                  Desplegamos la solución de manera ágil y rápida:
+                </p>
+                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 1.5rem 0", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                  <li style={{ display: "flex", alignItems: "start", gap: "0.75rem", color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.5", textAlign: "left" }}>
+                    <span style={{ color: "var(--accent-blue-light)", fontWeight: "bold", fontSize: "1.1rem" }}>✓</span>
+                    <span>Ofrecemos PoC para validar nuestra solución.</span>
+                  </li>
+                  <li style={{ display: "flex", alignItems: "start", gap: "0.75rem", color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.5", textAlign: "left" }}>
+                    <span style={{ color: "var(--accent-blue-light)", fontWeight: "bold", fontSize: "1.1rem" }}>✓</span>
+                    <span>Implementamos pilotos de uno o todos los módulos.</span>
+                  </li>
+                  <li style={{ display: "flex", alignItems: "start", gap: "0.75rem", color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: "1.5", textAlign: "left" }}>
+                    <span style={{ color: "var(--accent-blue-light)", fontWeight: "bold", fontSize: "1.1rem" }}>✓</span>
+                    <span>Desplegamos la solución a toda la organización.</span>
+                  </li>
+                </ul>
+                <p style={{ color: "var(--accent-blue-light)", fontWeight: "700", fontSize: "0.95rem", margin: 0, textAlign: "left" }}>
+                  Conéctate con nuestros consultores en producto e implementación.
+                </p>
+              </div>
             </div>
-          </div>
+            )}
+          </div>{/* end consultants section */}
 
-        </div>
       </main>
 
       <Footer />

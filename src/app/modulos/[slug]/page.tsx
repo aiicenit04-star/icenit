@@ -1,18 +1,23 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { db, modules, moduleFeatures } from "@/db/client";
-import { eq } from "drizzle-orm";
-import { notFound } from "next/navigation";
 import "../../public.css";
 
-export async function generateStaticParams() {
-  try {
-    const allModules = await db.select({ id: modules.id }).from(modules);
-    return allModules.map((m) => ({ slug: m.id }));
-  } catch {
-    return [];
-  }
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
+
+const SUPA_URL = 'https://qksigxubxkecqffdcgcu.supabase.co';
+const SUPA_KEY = 'sb_publishable_0hf41d14bVkcmpI8brc5og_jCWm-d5Z';
+
+async function supaFetch(table: string, params: Record<string, string> = {}) {
+  const url = new URL(`${SUPA_URL}/rest/v1/${table}`);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const res = await fetch(url.toString(), {
+    headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json' },
+    cache: 'no-store',
+  });
+  if (!res.ok) return [];
+  return res.json();
 }
 
 
@@ -20,6 +25,22 @@ interface ModulePageProps {
   params: Promise<{
     slug: string;
   }>;
+}
+
+interface Module {
+  id: string;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  meta_description?: string;
+  image_url?: string | null;
+  category: string;
+}
+
+interface ModuleFeature {
+  id: string;
+  feature: string;
+  module_id: string;
 }
 
 function getModuleIcon(id: string) {
@@ -125,26 +146,39 @@ export default async function ModuleDetailPage({ params }: ModulePageProps) {
   const { slug } = await params;
 
   // Fetch module metadata
-  const [moduleData] = await db
-    .select()
-    .from(modules)
-    .where(eq(modules.id, slug));
+  const moduleList: Module[] = await supaFetch('modules', { select: '*', id: `eq.${slug}` });
+  const moduleData = moduleList[0];
 
   if (!moduleData) {
-    notFound();
+    return (
+      <>
+        <Header />
+        <main className="page-section" style={{ flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ textAlign: "center" }}>
+            <h1 className="section-title" style={{ fontSize: "2rem", marginBottom: "1rem" }}>
+              Módulo no encontrado
+            </h1>
+            <p style={{ color: "var(--text-secondary)", marginBottom: "2rem" }}>
+              El módulo que buscas no existe o ha sido eliminado.
+            </p>
+            <Link href="/modulos" className="btn-primary">
+              Ver todos los módulos
+            </Link>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
   }
 
   // Fetch module features
-  const features = await db
-    .select()
-    .from(moduleFeatures)
-    .where(eq(moduleFeatures.moduleId, slug));
+  const features: ModuleFeature[] = await supaFetch('module_features', { select: 'feature', module_id: `eq.${slug}` });
 
-  // Fetch related modules in the same category
-  const relatedModules = await db
-    .select()
-    .from(modules)
-    .where(eq(modules.category, moduleData.category));
+  // Fetch related modules (same category, excluding current)
+  const relatedModules: Module[] = await supaFetch('modules', {
+    select: 'id,title,meta_description,image_url,category',
+    category: `eq.${moduleData.category}`,
+  });
 
   // Human readable category mapping
   const categoryNames: Record<string, string> = {
@@ -210,8 +244,8 @@ export default async function ModuleDetailPage({ params }: ModulePageProps) {
               Valores Destacados
             </h2>
             <ul className="pricing-features" style={{ marginBottom: 0 }}>
-              {features.map((f) => (
-                <li key={f.id} style={{ color: "var(--text-primary)" }}>{f.feature}</li>
+              {features.map((f, idx) => (
+                <li key={idx} style={{ color: "var(--text-primary)" }}>{f.feature}</li>
               ))}
             </ul>
           </div>
@@ -235,7 +269,7 @@ export default async function ModuleDetailPage({ params }: ModulePageProps) {
                       {m.title}
                     </h3>
                     <p className="module-desc" style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.6", textAlign: "left", marginBottom: 0 }}>
-                      {m.metaDescription}
+                      {m.meta_description}
                     </p>
                   </div>
                 </div>

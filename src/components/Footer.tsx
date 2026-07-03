@@ -1,7 +1,43 @@
 import Link from "next/link";
 import "./components.css";
 
-export default function Footer() {
+const SUPA_URL = 'https://qksigxubxkecqffdcgcu.supabase.co';
+const SUPA_KEY = 'sb_publishable_0hf41d14bVkcmpI8brc5og_jCWm-d5Z';
+
+async function supaFetch(table: string, params: Record<string, string> = {}) {
+  const url = new URL(`${SUPA_URL}/rest/v1/${table}`);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const res = await fetch(url.toString(), {
+    headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}`, 'Content-Type': 'application/json' },
+    cache: 'no-store',
+  });
+  if (!res.ok) return [];
+  return res.json();
+}
+
+interface SiteSetting {
+  key: string;
+  value: string;
+}
+
+export default async function Footer() {
+  const [settingsRows, siteImagesRows] = await Promise.all([
+    supaFetch('site_settings', { select: 'key,value' }),
+    supaFetch('site_images', { select: 'id,url' }),
+  ]);
+  const settings: Record<string, string> = Object.fromEntries(
+    (settingsRows as SiteSetting[]).map((s) => [s.key, s.value])
+  );
+  const siteImages: Record<string, string> = Object.fromEntries(
+    (siteImagesRows as { id: string; url: string }[]).map((s) => [s.id, s.url])
+  );
+
+  const address = settings.address ?? 'Estoril 200, Piso 10, Santiago de Chile';
+  const email = settings.email ?? 'contacto@icenit.ai';
+  const phone = settings.phone ?? '(+562) 284 09 598';
+  const linkedin = settings.linkedin ?? 'https://www.linkedin.com/company/82856989/';
+  const footerRobotUrl = siteImages['footer-robot'] || '/james-clean-footer.webp';
+
   return (
     <footer className="site-footer">
       <div className="footer-container">
@@ -70,12 +106,12 @@ export default function Footer() {
         <div className="footer-column">
           <span className="footer-title">Contacto</span>
           <div className="footer-info">
-            <p>Dirección: Estoril 200, Piso 10, Santiago de Chile</p>
-            <p>Email: contacto@icenit.ai</p>
-            <p>Teléfono: (+562) 284 09 598</p>
+            <p>Dirección: {address}</p>
+            <p>Email: {email}</p>
+            <p>Teléfono: {phone}</p>
             <p style={{ marginTop: "1rem" }}>
               <a 
-                href="https://www.linkedin.com/company/82856989/" 
+                href={linkedin}
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="footer-link"
@@ -101,7 +137,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <img src="/james-clean-footer.webp" alt="James Waving" className="footer-robot" />
+      <img src={footerRobotUrl} alt="James Waving" className="footer-robot" />
     </footer>
   );
 }
