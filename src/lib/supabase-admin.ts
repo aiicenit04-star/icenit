@@ -144,3 +144,56 @@ export async function supaCount(table: string): Promise<number> {
   const total = range.split("/")[1];
   return total ? parseInt(total, 10) : 0;
 }
+
+// ─── Supabase Storage helpers ─────────────────────────────────────────────────
+
+/** Upload a file to Supabase Storage. Returns public URL or throws. */
+export async function supaUploadFile(
+  bucket: string,
+  path: string,
+  data: ArrayBuffer | Uint8Array,
+  contentType: string
+): Promise<string> {
+  const storageUrl = `${getUrl()}/storage/v1/object/${bucket}/${path}`;
+
+  const res = await fetch(storageUrl, {
+    method: "PUT",
+    headers: {
+      apikey: getKey(),
+      Authorization: `Bearer ${getKey()}`,
+      "Content-Type": contentType,
+      "x-upsert": "true", // overwrite if exists
+    },
+    body: data,
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Storage upload failed: ${body}`);
+  }
+
+  return `${getUrl()}/storage/v1/object/public/${bucket}/${path}`;
+}
+
+/** Delete a file from Supabase Storage. */
+export async function supaDeleteFile(bucket: string, path: string): Promise<void> {
+  const storageUrl = `${getUrl()}/storage/v1/object/${bucket}/${path}`;
+
+  const res = await fetch(storageUrl, {
+    method: "DELETE",
+    headers: {
+      apikey: getKey(),
+      Authorization: `Bearer ${getKey()}`,
+    },
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Storage delete failed: ${body}`);
+  }
+}
+
+/** Returns the public URL for a stored file. */
+export function supaFileUrl(bucket: string, path: string): string {
+  return `${getUrl()}/storage/v1/object/public/${bucket}/${path}`;
+}
