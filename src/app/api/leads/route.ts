@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { db, contactSubmissions, demoRequests, jobApplications, getRedactedConnectionString } from "@/db/client";
-import postgres from "postgres";
+import { supaInsert, supaSelect } from "@/lib/supabase-admin";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -28,21 +27,21 @@ export async function POST(req: Request) {
           );
         }
 
-        // Convert file to Base64 Data URL for serverless/edge compatibility (no local disk)
+        // Convert file to Base64 Data URL for edge compatibility (no local disk)
         const bytes = await cvFile.arrayBuffer();
-        const base64String = Buffer.from(bytes).toString("base64");
+        const base64Arr = new Uint8Array(bytes);
+        let binary = "";
+        for (let i = 0; i < base64Arr.byteLength; i++) {
+          binary += String.fromCharCode(base64Arr[i]);
+        }
+        const base64String = btoa(binary);
         const cvUrl = `data:${cvFile.type || "application/pdf"};base64,${base64String}`;
 
-        // Insert into database
-        await db.insert(jobApplications).values({
-          name,
-          email,
-          phone,
-          position,
-          message,
-          cvUrl,
+        const { error } = await supaInsert("job_applications", {
+          name, email, phone, position, message, cv_url: cvUrl,
         });
 
+        if (error) return NextResponse.json({ error }, { status: 500 });
         return NextResponse.json({ success: true });
       }
     } else {
@@ -57,15 +56,10 @@ export async function POST(req: Request) {
             { status: 400 }
           );
         }
-
-        await db.insert(demoRequests).values({
-          name,
-          company,
-          email,
-          phone,
-          message,
+        const { error } = await supaInsert("demo_requests", {
+          name, company, email, phone, message,
         });
-
+        if (error) return NextResponse.json({ error }, { status: 500 });
         return NextResponse.json({ success: true });
       }
 
@@ -77,16 +71,10 @@ export async function POST(req: Request) {
             { status: 400 }
           );
         }
-
-        await db.insert(contactSubmissions).values({
-          name,
-          company,
-          email,
-          phone,
-          subject,
-          message,
+        const { error } = await supaInsert("contact_submissions", {
+          name, company, email, phone, subject, message,
         });
-
+        if (error) return NextResponse.json({ error }, { status: 500 });
         return NextResponse.json({ success: true });
       }
     }
@@ -102,46 +90,11 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
-  try {
-    const start = Date.now();
-    const connectionString = getRedactedConnectionString();
-    
-    // Create a temporary client with no retries/short timeouts
-    const sql = postgres(connectionString, {
-      prepare: false,
-      max: 1,
-      idle_timeout: 1,
-      connect_timeout: 3
-    });
-
-    let queryResult;
-    try {
-      queryResult = await sql`SELECT 1 as test`;
-    } catch (queryErr: any) {
-      await sql.end();
-      return NextResponse.json({
-        success: false,
-        phase: "query",
-        error: queryErr.message,
-        stack: queryErr.stack,
-        activeDatabaseEnv: connectionString
-      }, { status: 500 });
-    }
-
-    await sql.end();
-
-    return NextResponse.json({
-      success: true,
-      phase: "query",
-      result: queryResult,
-      durationMs: Date.now() - start
-    });
-  } catch (error: any) {
-    return NextResponse.json({
-      success: false,
-      message: error.message,
-      stack: error.stack,
-      rawError: String(error)
-    }, { status: 500 });
-  }
+  // Simple health check using Supabase REST (edge-compatible)
+  const { data, error } = await supaSelect("contact_submissions", {
+    select: "id",
+    limit: 1,
+  });
+  if (error) return NextResponse.json({ success: false, error }, { status: 500 });
+  return NextResponse.json({ success: true, rows: data?.length ?? 0 });
 }
