@@ -8,8 +8,10 @@ export function getRedactedConnectionString() {
   let connectionString = process.env.DATABASE_URL || "postgresql://postgres.qksigxubxkecqffdcgcu:Icenit2026!@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
   
   // Detect if we are running in Cloudflare Workers (production) or local Node.js
-  const isNodeJS = typeof navigator === "undefined" || navigator.userAgent !== "Cloudflare-Workers";
-  const isCloudflareProduction = !isNodeJS;
+  const isCloudflareProduction = 
+    typeof globalThis !== "undefined" && 
+    typeof (globalThis as any).WebSocket !== "undefined" && 
+    (typeof (globalThis as any).caches !== "undefined" || typeof (globalThis as any).EdgeRuntime !== "undefined");
   
   if (isCloudflareProduction) {
     // Under Cloudflare Workers (production), rewrite the pooler connection string to use the direct host/port 5432
