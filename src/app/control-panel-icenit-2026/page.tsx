@@ -25,12 +25,19 @@ async function MetricCards() {
   } catch (error: any) {
     const connectionString = getRedactedConnectionString();
     const redactedUrl = connectionString.replace(/:[^:@]+@/, ":****@");
+    const hasEnvUrl = typeof process !== "undefined" && !!process.env.DATABASE_URL;
+    const isPasswordMatching = connectionString.includes(":Icenit2026!@");
     
     return (
       <div style={{ gridColumn: "1 / -1", padding: "2rem", color: "#ef4444", backgroundColor: "#111827", border: "1px solid #374151", borderRadius: "8px", fontFamily: "monospace" }}>
         <h3 style={{ fontSize: "1.1rem", marginBottom: "0.5rem", color: "#f87171" }}>Error al cargar métricas de Base de Datos</h3>
         <p style={{ marginBottom: "0.5rem", fontWeight: "bold" }}>{error.message || String(error)}</p>
-        <div style={{ fontSize: "0.85rem", color: "#9ca3af" }}><strong>Causa:</strong> {error.cause ? (error.cause.message || JSON.stringify(error.cause)) : "N/A"}</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem", margin: "1rem 0", fontSize: "0.85rem", color: "#e5e7eb" }}>
+          <div><strong>Causa:</strong> {error.cause ? (error.cause.message || JSON.stringify(error.cause)) : "N/A"}</div>
+          <div><strong>URL de Conexión (Redactada):</strong> {redactedUrl}</div>
+          <div><strong>¿Usa Variable de Entorno en Cloudflare?:</strong> {hasEnvUrl ? "SÍ" : "NO (usa fallback hardcodeado)"}</div>
+          <div><strong>¿Contraseña coincide con local (Icenit2026!):</strong> {isPasswordMatching ? "SÍ" : "NO (¡la contraseña configurada en tu panel de Cloudflare es diferente!)"}</div>
+        </div>
       </div>
     );
   }
