@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { db, contactSubmissions, demoRequests, jobApplications } from "@/db/client";
-import { sql } from "drizzle-orm";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -9,35 +8,24 @@ export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
   const session = cookieStore.get("admin_session")?.value;
-
   if (session !== "authenticated") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    // Sequential queries — avoids Cloudflare Workers subrequest limit
-    const contactsResult = await db.select({ count: sql<number>`count(*)` }).from(contactSubmissions).then((r) => r[0]);
-    const demosResult = await db.select({ count: sql<number>`count(*)` }).from(demoRequests).then((r) => r[0]);
-    const applicationsResult = await db.select({ count: sql<number>`count(*)` }).from(jobApplications).then((r) => r[0]);
+    const [{ count: contacts }, { count: demos }, { count: applications }] = await Promise.all([
+      supabaseAdmin.from("contact_submissions").select("*", { count: "exact", head: true }),
+      supabaseAdmin.from("demo_requests").select("*", { count: "exact", head: true }),
+      supabaseAdmin.from("job_applications").select("*", { count: "exact", head: true }),
+    ]);
 
     return NextResponse.json({
-      contacts: Number(contactsResult?.count ?? 0),
-      demos: Number(demosResult?.count ?? 0),
-      applications: Number(applicationsResult?.count ?? 0),
+      contacts: contacts ?? 0,
+      demos: demos ?? 0,
+      applications: applications ?? 0,
     });
   } catch (error: any) {
     console.error("Error fetching metrics:", error);
-    return NextResponse.json(
-      {
-        error: error.message,
-        pg_code: error?.code,
-        pg_detail: error?.detail,
-        pg_severity: error?.severity,
-        pg_hint: error?.hint,
-        cause: error?.cause ? String(error.cause) : undefined,
-        type: error?.constructor?.name,
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message ?? "Error al obtener métricas" }, { status: 500 });
   }
 }

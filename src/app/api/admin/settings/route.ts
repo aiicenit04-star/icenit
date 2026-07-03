@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { db, siteSettings } from "@/db/client";
-import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export const runtime = "edge";
-
 export const dynamic = "force-dynamic";
 
 async function checkAuth() {
@@ -13,21 +10,23 @@ async function checkAuth() {
   return cookieStore.get("admin_session")?.value === "authenticated";
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   if (!(await checkAuth())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  try {
-    const [settings] = await db.select().from(siteSettings).where(eq(siteSettings.id, 1));
-    if (!settings) {
-      return NextResponse.json({ error: "No se encontró la configuración del sitio (ID=1)" }, { status: 404 });
-    }
-    return NextResponse.json(settings);
-  } catch (error: any) {
-    console.error("Error fetching settings:", error);
-    return NextResponse.json({ error: error.message || "Error al obtener la configuración" }, { status: 500 });
+  const { data, error } = await supabaseAdmin
+    .from("site_settings")
+    .select("*")
+    .order("id", { ascending: true })
+    .limit(1)
+    .single();
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
+
+  return NextResponse.json(data);
 }
 
 export async function PUT(request: NextRequest) {
@@ -35,26 +34,19 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  try {
-    const body = await request.json();
-    const { phone, email, address, linkedin, metaTitle, metaDescription } = body;
+  const body = await request.json();
+  const { phone, email, address, linkedin, meta_title, meta_description } = body;
 
-    if (!phone || !email || !address || !metaTitle || !metaDescription) {
-      return NextResponse.json({ error: "Faltan campos obligatorios" }, { status: 400 });
-    }
+  const { data, error } = await supabaseAdmin
+    .from("site_settings")
+    .update({ phone, email, address, linkedin, meta_title, meta_description })
+    .eq("id", 1)
+    .select()
+    .single();
 
-    await db
-      .update(siteSettings)
-      .set({ phone, email, address, linkedin: linkedin || null, metaTitle, metaDescription })
-      .where(eq(siteSettings.id, 1));
-
-    revalidatePath("/");
-    revalidatePath("/empresa");
-    revalidatePath("/precios");
-
-    return NextResponse.json({ success: true });
-  } catch (error: any) {
-    console.error("Error updating settings:", error);
-    return NextResponse.json({ error: error.message || "Error al actualizar la configuración" }, { status: 500 });
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
+
+  return NextResponse.json({ success: true, data });
 }

@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { db, useCases } from "@/db/client";
-import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export const runtime = "edge";
-
 export const dynamic = "force-dynamic";
 
 async function checkAuth() {
@@ -13,18 +10,19 @@ async function checkAuth() {
   return cookieStore.get("admin_session")?.value === "authenticated";
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   if (!(await checkAuth())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  try {
-    const allUseCases = await db.select().from(useCases);
-    return NextResponse.json(allUseCases);
-  } catch (error: any) {
-    console.error("Error fetching use cases:", error);
-    return NextResponse.json({ error: error.message || "Error al obtener los casos de uso" }, { status: 500 });
-  }
+  const { data, error } = await supabaseAdmin
+    .from("use_cases")
+    .select("*")
+    .order("id", { ascending: true });
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  return NextResponse.json(data);
 }
 
 export async function PUT(request: NextRequest) {
@@ -32,25 +30,15 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  try {
-    const body = await request.json();
-    const { id, title, context, challenge, strategy, results } = body;
+  const body = await request.json();
+  const { id, title, context, challenge, strategy, results } = body;
 
-    if (!id || !title || !context || !challenge || !strategy || !results) {
-      return NextResponse.json({ error: "Faltan campos obligatorios" }, { status: 400 });
-    }
+  const { error } = await supabaseAdmin
+    .from("use_cases")
+    .update({ title, context, challenge, strategy, results })
+    .eq("id", id);
 
-    await db
-      .update(useCases)
-      .set({ title, context, challenge, strategy, results })
-      .where(eq(useCases.id, id));
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-    revalidatePath("/");
-    revalidatePath(`/casos-de-uso/${id}`);
-
-    return NextResponse.json({ success: true });
-  } catch (error: any) {
-    console.error("Error updating use case:", error);
-    return NextResponse.json({ error: error.message || "Error al actualizar el caso de uso" }, { status: 500 });
-  }
+  return NextResponse.json({ success: true });
 }
