@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -13,10 +13,11 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    const supabase = getSupabaseAdmin();
     const [{ count: contacts }, { count: demos }, { count: applications }] = await Promise.all([
-      supabaseAdmin.from("contact_submissions").select("*", { count: "exact", head: true }),
-      supabaseAdmin.from("demo_requests").select("*", { count: "exact", head: true }),
-      supabaseAdmin.from("job_applications").select("*", { count: "exact", head: true }),
+      supabase.from("contact_submissions").select("*", { count: "exact", head: true }),
+      supabase.from("demo_requests").select("*", { count: "exact", head: true }),
+      supabase.from("job_applications").select("*", { count: "exact", head: true }),
     ]);
 
     return NextResponse.json({

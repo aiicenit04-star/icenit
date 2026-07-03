@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -15,7 +15,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { data, error } = await supabaseAdmin
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
     .from("use_cases")
     .select("*")
     .order("id", { ascending: true });
@@ -30,10 +31,11 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const supabase = getSupabaseAdmin();
   const body = await request.json();
   const { id, title, context, challenge, strategy, results } = body;
 
-  const { error } = await supabaseAdmin
+  const { error } = await supabase
     .from("use_cases")
     .update({ title, context, challenge, strategy, results })
     .eq("id", id);

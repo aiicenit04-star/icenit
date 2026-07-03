@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -15,14 +15,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { data: modulesList, error: e1 } = await supabaseAdmin
+  const supabase = getSupabaseAdmin();
+
+  const { data: modulesList, error: e1 } = await supabase
     .from("modules")
     .select("*")
     .order("id", { ascending: true });
 
   if (e1) return NextResponse.json({ error: e1.message }, { status: 500 });
 
-  const { data: features, error: e2 } = await supabaseAdmin
+  const { data: features, error: e2 } = await supabase
     .from("module_features")
     .select("*")
     .order("id", { ascending: true });
@@ -42,31 +44,25 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const supabase = getSupabaseAdmin();
   const body = await request.json();
   const { id, title, subtitle, description, meta_description, category, features } = body;
 
-  // Update module fields
-  const { error: e1 } = await supabaseAdmin
+  const { error: e1 } = await supabase
     .from("modules")
     .update({ title, subtitle, description, meta_description, category })
     .eq("id", id);
 
   if (e1) return NextResponse.json({ error: e1.message }, { status: 500 });
 
-  // Replace features: delete existing then insert new
   if (Array.isArray(features)) {
-    const { error: e2 } = await supabaseAdmin
-      .from("module_features")
-      .delete()
-      .eq("module_id", id);
-
+    const { error: e2 } = await supabase.from("module_features").delete().eq("module_id", id);
     if (e2) return NextResponse.json({ error: e2.message }, { status: 500 });
 
     if (features.length > 0) {
-      const { error: e3 } = await supabaseAdmin
+      const { error: e3 } = await supabase
         .from("module_features")
         .insert(features.map((feature: string) => ({ module_id: id, feature })));
-
       if (e3) return NextResponse.json({ error: e3.message }, { status: 500 });
     }
   }
