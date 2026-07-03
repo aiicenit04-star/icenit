@@ -1,19 +1,26 @@
+export const runtime = "edge";
+export const dynamic = "force-dynamic";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { db, modules } from "@/db/client";
-import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import "../../public.css";
 
-export async function generateStaticParams() {
-  return [
-    { slug: "findings" },
-    { slug: "advanced-analytics" },
-    { slug: "process-digitization" },
-    { slug: "management-support" }
-  ];
+const SUPA_URL = "https://qksigxubxkecqffdcgcu.supabase.co";
+const SUPA_KEY = "sb_publishable_0hf41d14bVkcmpI8brc5og_jCWm-d5Z";
+
+async function supaFetch(table: string, params: Record<string, string> = {}) {
+  const url = new URL(`${SUPA_URL}/rest/v1/${table}`);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const res = await fetch(url.toString(), {
+    headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` },
+    cache: "no-store",
+  });
+  if (!res.ok) return [];
+  return res.json();
 }
+
 
 
 interface CategoryPageProps {
@@ -147,10 +154,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  const categoryModules = await db
-    .select()
-    .from(modules)
-    .where(eq(modules.category, slug));
+  const categoryModules = await supaFetch("modules", {
+    select: "id,title,subtitle,meta_description,image_url",
+    category: `eq.${slug}`,
+    order: "title.asc",
+  });
 
   return (
     <>
