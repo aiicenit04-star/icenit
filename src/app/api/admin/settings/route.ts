@@ -15,19 +15,20 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase
-    .from("site_settings")
-    .select("*")
-    .order("id", { ascending: true })
-    .limit(1)
-    .single();
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("*")
+      .order("id", { ascending: true })
+      .limit(1)
+      .single();
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(data);
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
-
-  return NextResponse.json(data);
 }
 
 export async function PUT(request: NextRequest) {
@@ -35,20 +36,21 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const supabase = getSupabaseAdmin();
-  const body = await request.json();
-  const { phone, email, address, linkedin, meta_title, meta_description } = body;
+  try {
+    const supabase = getSupabaseAdmin();
+    const body = await request.json();
+    const { phone, email, address, linkedin, meta_title, meta_description } = body;
 
-  const { data, error } = await supabase
-    .from("site_settings")
-    .update({ phone, email, address, linkedin, meta_title, meta_description })
-    .eq("id", 1)
-    .select()
-    .single();
+    const { data, error } = await supabase
+      .from("site_settings")
+      .update({ phone, email, address, linkedin, meta_title, meta_description })
+      .eq("id", 1)
+      .select()
+      .single();
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ success: true, data });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
-
-  return NextResponse.json({ success: true, data });
 }
