@@ -7,22 +7,6 @@ type DrizzleDBType = ReturnType<typeof drizzle<typeof schema>>;
 export function getRedactedConnectionString() {
   let connectionString = process.env.DATABASE_URL || "postgresql://postgres.qksigxubxkecqffdcgcu:Icenit2026!@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
   
-  // Detect if we are running in Cloudflare Workers (production) or local Node.js
-  const isCloudflareProduction = 
-    typeof globalThis !== "undefined" && 
-    typeof (globalThis as any).WebSocket !== "undefined" && 
-    (typeof (globalThis as any).caches !== "undefined" || typeof (globalThis as any).EdgeRuntime !== "undefined");
-  
-  if (isCloudflareProduction) {
-    // Under Cloudflare Workers (production), rewrite the pooler connection string to use the direct host/port 5432
-    // Cloudflare Workers natively supports IPv6 direct connection, which avoids all pooler limits and TLS renegotiation bugs
-    if (connectionString.includes("pooler.supabase.com:6543")) {
-      connectionString = connectionString
-        .replace("aws-1-us-east-2.pooler.supabase.com:6543", "db.qksigxubxkecqffdcgcu.supabase.co:5432")
-        .replace("://postgres.qksigxubxkecqffdcgcu:", "://postgres:");
-    }
-  }
-  
   // Auto-correct the database username to include the project tenant identifier if connecting to the Supabase pooler
   if (connectionString.includes("pooler.supabase.com") && connectionString.includes("://postgres:")) {
     connectionString = connectionString.replace("://postgres:", "://postgres.qksigxubxkecqffdcgcu:");
@@ -40,10 +24,16 @@ let globalDb: DrizzleDBType | null = null;
 export function getDB(): DrizzleDBType {
   if (!globalDb) {
     const connectionString = getRedactedConnectionString();
+    
+    // Configure postgres client with aggressive idle timeout (0.2s)
+    // In serverless environments (Cloudflare Workers), isolates are frozen between requests.
+    // If a connection remains idle in the pool, it becomes stale. 
+    // Closing it after 200ms of inactivity prevents stale connections and infinite retry loops.
+    // We connect to the pooler (port 6543) which uses Supavisor warm connections for high speed.
     const client = postgres(connectionString, {
       prepare: false,
       max: 1,
-      idle_timeout: 10,
+      idle_timeout: 0.2, // Close connection after 200ms of inactivity
       connect_timeout: 5,
       ssl: { rejectUnauthorized: false }
     });
