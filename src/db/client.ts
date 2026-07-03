@@ -9,15 +9,16 @@ type DrizzleDBType = ReturnType<typeof drizzle<typeof schema>>;
 // Use React's cache to scope the database client connection to the current request lifecycle.
 // This prevents reusing stale/closed TCP connections across requests in frozen Cloudflare Workers isolates.
 export function getRedactedConnectionString() {
-  let connectionString = process.env.DATABASE_URL;
+  let connectionString = process.env.DATABASE_URL || "postgresql://postgres.qksigxubxkecqffdcgcu:Icenit2026!@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
   
-  if (!connectionString) {
-    if (process.env.NEXT_RUNTIME === "edge") {
-      // Direct connection on port 5432 (IPv6-compatible, recommended for Cloudflare Workers)
-      connectionString = "postgresql://postgres.qksigxubxkecqffdcgcu:Icenit2026!@db.qksigxubxkecqffdcgcu.supabase.co:5432/postgres";
-    } else {
-      // Connection pooler on port 6543 (IPv4-compatible, required for local dev environments lacking IPv6)
-      connectionString = "postgresql://postgres.qksigxubxkecqffdcgcu:Icenit2026!@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
+  // Under Cloudflare Workers (production), rewrite the pooler connection string to use the direct host/port 5432
+  // Cloudflare Workers natively supports IPv6 direct connection, which avoids all pooler limits and TLS renegotiation bugs
+  const isCloudflareProduction = typeof process !== "undefined" && process.env.NEXT_RUNTIME === "edge";
+  if (isCloudflareProduction) {
+    if (connectionString.includes("pooler.supabase.com:6543")) {
+      connectionString = connectionString
+        .replace("aws-1-us-east-2.pooler.supabase.com:6543", "db.qksigxubxkecqffdcgcu.supabase.co:5432")
+        .replace("://postgres.qksigxubxkecqffdcgcu:", "://postgres:");
     }
   }
   
