@@ -151,7 +151,7 @@ export async function supaCount(table: string): Promise<number> {
 export async function supaUploadFile(
   bucket: string,
   path: string,
-  data: ArrayBuffer | Uint8Array,
+  data: ArrayBuffer,
   contentType: string
 ): Promise<string> {
   const storageUrl = `${getUrl()}/storage/v1/object/${bucket}/${path}`;
@@ -162,9 +162,9 @@ export async function supaUploadFile(
       apikey: getKey(),
       Authorization: `Bearer ${getKey()}`,
       "Content-Type": contentType,
-      "x-upsert": "true", // overwrite if exists
+      "x-upsert": "true",
     },
-    body: data,
+    body: data as BodyInit,
   });
 
   if (!res.ok) {
