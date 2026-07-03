@@ -45,9 +45,13 @@ export function getDB(): DrizzleDBType {
 // Export a Proxy to lazy-load the database client connection.
 // This prevents Next.js edge runtime build compilation errors (e.g. node:stream missing) during static page generation.
 export const db = new Proxy({} as any, {
-  get(target, prop, receiver) {
+  get(target, prop) {
     const actualDb = getDB();
-    return Reflect.get(actualDb, prop, receiver);
+    const value = Reflect.get(actualDb, prop);
+    if (typeof value === "function") {
+      return value.bind(actualDb);
+    }
+    return value;
   }
 }) as unknown as DrizzleDBType;
 
