@@ -1,19 +1,26 @@
+export const runtime = "edge";
+export const dynamic = "force-dynamic";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { db, useCases } from "@/db/client";
-import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import "../../public.css";
 
-export async function generateStaticParams() {
-  try {
-    const cases = await db.select({ id: useCases.id }).from(useCases);
-    return cases.map((c) => ({ slug: c.id }));
-  } catch {
-    return [];
-  }
+const SUPA_URL = "https://qksigxubxkecqffdcgcu.supabase.co";
+const SUPA_KEY = "sb_publishable_0hf41d14bVkcmpI8brc5og_jCWm-d5Z";
+
+async function supaFetch(table: string, params: Record<string, string> = {}) {
+  const url = new URL(`${SUPA_URL}/rest/v1/${table}`);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const res = await fetch(url.toString(), {
+    headers: { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` },
+    cache: "no-store",
+  });
+  if (!res.ok) return [];
+  return res.json();
 }
+
 
 
 interface UseCasePageProps {
@@ -25,10 +32,8 @@ interface UseCasePageProps {
 export default async function UseCaseDetailPage({ params }: UseCasePageProps) {
   const { slug } = await params;
 
-  const [useCase] = await db
-    .select()
-    .from(useCases)
-    .where(eq(useCases.id, slug));
+  const data = await supaFetch("use_cases", { select: "*", id: `eq.${slug}` });
+  const useCase = data[0];
 
   if (!useCase) {
     notFound();
@@ -625,7 +630,7 @@ export default async function UseCaseDetailPage({ params }: UseCasePageProps) {
               El Desafío
             </h2>
             <ul style={{ display: "flex", flexDirection: "column", gap: "1rem", listStyle: "none", color: "var(--text-secondary)", padding: 0 }}>
-              {challenges.map((c, i) => (
+              {challenges.map((c: string, i: number) => (
                 <li key={i} style={{ lineHeight: "1.6", fontSize: "0.95rem" }}>{c}</li>
               ))}
             </ul>
@@ -647,7 +652,7 @@ export default async function UseCaseDetailPage({ params }: UseCasePageProps) {
               Estrategia con James®
             </h2>
             <ul style={{ display: "flex", flexDirection: "column", gap: "1rem", listStyle: "none", color: "var(--text-secondary)", padding: 0 }}>
-              {strategies.map((s, i) => (
+              {strategies.map((s: string, i: number) => (
                 <li key={i} style={{ lineHeight: "1.6", fontSize: "0.95rem" }}>{s}</li>
               ))}
             </ul>
@@ -677,7 +682,7 @@ export default async function UseCaseDetailPage({ params }: UseCasePageProps) {
             Resultados Obtenidos
           </h2>
           <ul style={{ display: "flex", flexDirection: "column", gap: "1rem", listStyle: "none", color: "var(--text-primary)", padding: 0 }}>
-            {results.map((r, i) => (
+            {results.map((r: string, i: number) => (
               <li
                 key={i}
                 style={{
