@@ -31,27 +31,30 @@ export default async function AdminLayout({
         </div>
         <nav className="admin-nav">
           <Link href="/control-panel-icenit-2026" className="admin-nav-item">
-            Dashboard
+            📊 Dashboard
           </Link>
           <Link href="/control-panel-icenit-2026/leads" className="admin-nav-item">
-            Leads y Formularios
+            📬 Leads y Formularios
           </Link>
 
           <div style={{ fontSize: "0.7rem", color: "#4b5563", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", padding: "0.9rem 0.75rem 0.3rem", marginTop: "0.5rem", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
             Contenido del Sitio
           </div>
-          <Link href="/control-panel-icenit-2026/homepage" className="admin-nav-item">
-            📝 Texto del Homepage
-          </Link>
-          <Link href="/control-panel-icenit-2026/imagenes" className="admin-nav-item">
-            🖼 Imágenes del Sitio
+          <Link href="/control-panel-icenit-2026/banner" className="admin-nav-item">
+            🏠 Banner Principal
           </Link>
           <Link href="/control-panel-icenit-2026/logos" className="admin-nav-item">
             🏢 Logos de Clientes
           </Link>
+          <Link href="/control-panel-icenit-2026/imagenes" className="admin-nav-item">
+            🖼 Todas las Imágenes
+          </Link>
+          <Link href="/control-panel-icenit-2026/homepage" className="admin-nav-item">
+            📝 Textos del Sitio
+          </Link>
 
           <div style={{ fontSize: "0.7rem", color: "#4b5563", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", padding: "0.9rem 0.75rem 0.3rem", marginTop: "0.5rem", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-            Plataforma
+            Plataforma James
           </div>
           <Link href="/control-panel-icenit-2026/modules" className="admin-nav-item">
             🧩 Módulos
@@ -63,7 +66,7 @@ export default async function AdminLayout({
             ⚙️ Configuración
           </Link>
           <Link href="/" className="admin-nav-item" target="_blank" style={{ marginTop: "1rem", borderTop: "1px solid rgba(255,255,255,0.04)", paddingTop: "1rem" }}>
-            🌐 Ver Sitio Público
+            🌐 Ver Sitio Público ↗
           </Link>
         </nav>
         <form action={logout}>

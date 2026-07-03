@@ -31,11 +31,11 @@ export async function PUT(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { id, title, context, challenge, strategy, results } = body;
+    const { id, title, context, challenge, strategy, results, image_url } = body;
 
     const { error } = await supaUpdate(
       "use_cases",
-      { title, context, challenge, strategy, results },
+      { title, context, challenge, strategy, results, ...(image_url !== undefined && { image_url }) },
       "id",
       id
     );
