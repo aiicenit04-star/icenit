@@ -18,6 +18,7 @@ export const modules = pgTable("modules", {
   subtitle: text("subtitle").notNull(),
   metaDescription: text("meta_description").notNull(),
   description: text("description").notNull(),
+  imageUrl: text("image_url"),
 });
 
 export const moduleFeatures = pgTable("module_features", {

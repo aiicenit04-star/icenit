@@ -148,8 +148,12 @@ export default async function ModulosPage() {
             {analitica.map((m) => (
               <div key={m.id} className="module-card" style={{ padding: 0, overflow: "hidden" }}>
                 <div>
-                  <div style={{ background: "rgba(255, 255, 255, 0.02)", height: "160px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
-                    {getModuleIcon(m.id)}
+                  <div style={{ background: "rgba(255, 255, 255, 0.02)", height: "160px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.04)", overflow: "hidden", position: "relative" }}>
+                    {m.imageUrl ? (
+                      <img src={m.imageUrl} alt={m.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    ) : (
+                      getModuleIcon(m.id)
+                    )}
                   </div>
                   <div style={{ padding: "1.75rem 1.75rem 1rem 1.75rem" }}>
                     <h3 className="module-title" style={{ color: "#fff", marginTop: 0, marginBottom: "0.75rem", fontSize: "1.2rem", fontWeight: "700", textAlign: "left" }}>
@@ -163,16 +167,7 @@ export default async function ModulosPage() {
                 <div style={{ padding: "0 1.75rem 1.75rem 1.75rem" }}>
                   <Link 
                     href={`/modulos/${m.id}`} 
-                    style={{ 
-                      display: "inline-flex", 
-                      alignItems: "center", 
-                      color: "var(--accent-blue-light)", 
-                      fontWeight: "700", 
-                      textDecoration: "none", 
-                      fontSize: "0.8rem", 
-                      letterSpacing: "1px", 
-                      textTransform: "uppercase" 
-                    }}
+                    style={{ display: "inline-flex", alignItems: "center", color: "var(--accent-blue-light)", fontWeight: "700", textDecoration: "none", fontSize: "0.8rem", letterSpacing: "1px", textTransform: "uppercase" }}
                   >
                     Ver Módulo <span style={{ marginLeft: "0.5rem", fontWeight: "bold", fontSize: "0.95rem" }}>&gt;</span>
                   </Link>
@@ -196,8 +191,12 @@ export default async function ModulosPage() {
             {aplicaciones.map((m) => (
               <div key={m.id} className="module-card" style={{ padding: 0, overflow: "hidden" }}>
                 <div>
-                  <div style={{ background: "rgba(255, 255, 255, 0.02)", height: "160px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
-                    {getModuleIcon(m.id)}
+                  <div style={{ background: "rgba(255, 255, 255, 0.02)", height: "160px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.04)", overflow: "hidden", position: "relative" }}>
+                    {m.imageUrl ? (
+                      <img src={m.imageUrl} alt={m.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    ) : (
+                      getModuleIcon(m.id)
+                    )}
                   </div>
                   <div style={{ padding: "1.75rem 1.75rem 1rem 1.75rem" }}>
                     <h3 className="module-title" style={{ color: "#fff", marginTop: 0, marginBottom: "0.75rem", fontSize: "1.2rem", fontWeight: "700", textAlign: "left" }}>
@@ -211,16 +210,7 @@ export default async function ModulosPage() {
                 <div style={{ padding: "0 1.75rem 1.75rem 1.75rem" }}>
                   <Link 
                     href={`/modulos/${m.id}`} 
-                    style={{ 
-                      display: "inline-flex", 
-                      alignItems: "center", 
-                      color: "var(--accent-blue-light)", 
-                      fontWeight: "700", 
-                      textDecoration: "none", 
-                      fontSize: "0.8rem", 
-                      letterSpacing: "1px", 
-                      textTransform: "uppercase" 
-                    }}
+                    style={{ display: "inline-flex", alignItems: "center", color: "var(--accent-blue-light)", fontWeight: "700", textDecoration: "none", fontSize: "0.8rem", letterSpacing: "1px", textTransform: "uppercase" }}
                   >
                     Ver Módulo <span style={{ marginLeft: "0.5rem", fontWeight: "bold", fontSize: "0.95rem" }}>&gt;</span>
                   </Link>
@@ -244,8 +234,12 @@ export default async function ModulosPage() {
             {apoyo.map((m) => (
               <div key={m.id} className="module-card" style={{ padding: 0, overflow: "hidden" }}>
                 <div>
-                  <div style={{ background: "rgba(255, 255, 255, 0.02)", height: "160px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
-                    {getModuleIcon(m.id)}
+                  <div style={{ background: "rgba(255, 255, 255, 0.02)", height: "160px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.04)", overflow: "hidden", position: "relative" }}>
+                    {m.imageUrl ? (
+                      <img src={m.imageUrl} alt={m.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    ) : (
+                      getModuleIcon(m.id)
+                    )}
                   </div>
                   <div style={{ padding: "1.75rem 1.75rem 1rem 1.75rem" }}>
                     <h3 className="module-title" style={{ color: "#fff", marginTop: 0, marginBottom: "0.75rem", fontSize: "1.2rem", fontWeight: "700", textAlign: "left" }}>
@@ -259,16 +253,7 @@ export default async function ModulosPage() {
                 <div style={{ padding: "0 1.75rem 1.75rem 1.75rem" }}>
                   <Link 
                     href={`/modulos/${m.id}`} 
-                    style={{ 
-                      display: "inline-flex", 
-                      alignItems: "center", 
-                      color: "var(--accent-blue-light)", 
-                      fontWeight: "700", 
-                      textDecoration: "none", 
-                      fontSize: "0.8rem", 
-                      letterSpacing: "1px", 
-                      textTransform: "uppercase" 
-                    }}
+                    style={{ display: "inline-flex", alignItems: "center", color: "var(--accent-blue-light)", fontWeight: "700", textDecoration: "none", fontSize: "0.8rem", letterSpacing: "1px", textTransform: "uppercase" }}
                   >
                     Ver Módulo <span style={{ marginLeft: "0.5rem", fontWeight: "bold", fontSize: "0.95rem" }}>&gt;</span>
                   </Link>

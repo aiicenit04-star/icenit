@@ -81,13 +81,50 @@ export default function ModulesAdminPage() {
     else setFeatures(features.filter((_, i) => i !== index));
   };
 
+  // ─── Image compression via Canvas API ────────────────────────────────────
+  /** Compresses an image file using Canvas. Returns a compressed Blob. */
+  const compressImage = (file: File, maxWidth = 1200, quality = 0.82): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+        // Calculate target dimensions keeping aspect ratio
+        let { width, height } = img;
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject(new Error("Canvas no disponible"));
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) return reject(new Error("Compresión fallida"));
+            resolve(blob);
+          },
+          "image/webp",
+          quality
+        );
+      };
+      img.onerror = () => reject(new Error("No se pudo cargar la imagen"));
+      img.src = objectUrl;
+    });
+  };
+
   // ─── Image handlers ────────────────────────────────────────────────────────
+
+  const [compressInfo, setCompressInfo] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploadFile(file);
     setUploadStatus({ type: "idle" });
+    setCompressInfo(`Original: ${(file.size / 1024).toFixed(0)} KB`);
     const reader = new FileReader();
     reader.onload = (ev) => setImagePreview(ev.target?.result as string);
     reader.readAsDataURL(file);
@@ -98,9 +135,17 @@ export default function ModulesAdminPage() {
     setUploadStatus({ type: "uploading" });
 
     try {
+      // Compress before upload
+      const compressed = await compressImage(uploadFile);
+      const compressedKB = (compressed.size / 1024).toFixed(0);
+      const originalKB = (uploadFile.size / 1024).toFixed(0);
+      setCompressInfo(`${originalKB} KB → ${compressedKB} KB (WebP)`);
+
+      const compressedFile = new File([compressed], `${selectedId}.webp`, { type: "image/webp" });
+
       const form = new FormData();
       form.append("moduleId", selectedId);
-      form.append("file", uploadFile);
+      form.append("file", compressedFile);
 
       const res = await fetch("/api/admin/modules/image", { method: "POST", body: form });
       const json = await res.json();
@@ -114,7 +159,7 @@ export default function ModulesAdminPage() {
         setUploadFile(null);
         setImagePreview(null);
         if (fileInputRef.current) fileInputRef.current.value = "";
-        setUploadStatus({ type: "success", text: "Imagen subida correctamente" });
+        setUploadStatus({ type: "success", text: `Imagen subida y comprimida (${originalKB}→${compressedKB} KB)` });
       } else {
         setUploadStatus({ type: "error", text: json.error ?? "Error al subir imagen" });
       }
@@ -156,6 +201,7 @@ export default function ModulesAdminPage() {
     setUploadFile(null);
     setImagePreview(null);
     setUploadStatus({ type: "idle" });
+    setCompressInfo(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -343,7 +389,9 @@ export default function ModulesAdminPage() {
                         style={{ display: "none" }}
                       />
                       <span style={{ marginLeft: "0.75rem", fontSize: "0.8rem", color: "#6b7280" }}>
-                        {uploadFile ? uploadFile.name : "JPG, PNG, WEBP o GIF — máx. 5 MB"}
+                        {uploadFile
+                          ? <>{uploadFile.name} {compressInfo && <span style={{ color: "#10b981" }}>— {compressInfo}</span>}</>
+                          : "JPG, PNG, WEBP o GIF — máx. 5 MB (se comprime automáticamente)"}
                       </span>
                     </div>
 
