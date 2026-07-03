@@ -182,7 +182,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </div>
 
         <div className="modules-grid animate-fade-in-up delay-4">
-          {categoryModules.map((m) => (
+          {categoryModules.map((m: any) => (
             <div key={m.id} className="module-card" style={{ padding: 0, overflow: "hidden" }}>
               <div>
                 <div style={{ background: "rgba(255, 255, 255, 0.02)", height: "160px", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
