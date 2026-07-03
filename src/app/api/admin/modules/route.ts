@@ -4,7 +4,8 @@ import { db, modules, moduleFeatures } from "@/db/client";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
+
 export const dynamic = "force-dynamic";
 
 async function checkAuth() {

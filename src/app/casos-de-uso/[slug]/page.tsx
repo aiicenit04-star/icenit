@@ -7,6 +7,8 @@ import { notFound } from "next/navigation";
 import "../../public.css";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
 
 
 interface UseCasePageProps {

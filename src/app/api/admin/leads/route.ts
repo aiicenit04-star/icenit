@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { db, contactSubmissions, demoRequests, jobApplications } from "@/db/client";
 import { desc } from "drizzle-orm";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
@@ -15,11 +15,10 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const [contacts, demos, applications] = await Promise.all([
-      db.select().from(contactSubmissions).orderBy(desc(contactSubmissions.id)),
-      db.select().from(demoRequests).orderBy(desc(demoRequests.id)),
-      db.select().from(jobApplications).orderBy(desc(jobApplications.id)),
-    ]);
+    // Sequential queries — avoids Cloudflare Workers subrequest limit
+    const contacts = await db.select().from(contactSubmissions).orderBy(desc(contactSubmissions.id));
+    const demos = await db.select().from(demoRequests).orderBy(desc(demoRequests.id));
+    const applications = await db.select().from(jobApplications).orderBy(desc(jobApplications.id));
 
     return NextResponse.json({ contacts, demos, applications });
   } catch (error: any) {

@@ -5,6 +5,8 @@ import { db, modules, useCases } from "@/db/client";
 import "./public.css";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
 
 export default async function Home() {
   const allModules = await db.select().from(modules);

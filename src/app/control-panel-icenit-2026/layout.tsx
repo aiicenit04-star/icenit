@@ -4,6 +4,8 @@ import Link from "next/link";
 import LoginForm from "./login-form";
 import { logout } from "./auth-actions";
 
+export const runtime = "edge";
+
 export default async function AdminLayout({
   children,
 }: {
