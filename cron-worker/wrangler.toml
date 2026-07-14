@@ -1,0 +1,6 @@
+name = "icenit-cron"
+main = "index.js"
+compatibility_date = "2026-07-14"
+
+[triggers]
+crons = ["0 8 * * *"]   # Every day at 08:00 UTC
